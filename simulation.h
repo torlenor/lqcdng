@@ -1,5 +1,5 @@
 /*
- * init.h - program initialization header
+ * simulation.h - main simulation functions header
  *
  * Copyright © 2013 H.-P. Schadler  <hanspeter.schadler@uni-graz.at>
  *
@@ -19,11 +19,30 @@
  *
  */
 
-#ifndef INIT_H
-#define INIT_H
+#ifndef SIMULATION_H
+#define SIMULATION_H
 
+#include <vector>
+
+#include "su3.h"
 #include "globalsettings.h"
 
-int Init(int &argc, char *argv[], GlobalSettings &settings);
+class MCSimulation {
+  public:
+    MCSimulation(GlobalSettings &settings);
+    ~MCSimulation();
 
-#endif // INIT_H
+    int StartSimulation();
+
+  private:
+    void PrepareNeib();
+    void PrepareStorage();
+    void DeleteStorage();
+    void Update(const int nskip);
+
+    GlobalSettings settings_;
+    std::vector<Su3Matrix*> lattice_;
+    std::vector<std::vector<int> > neib_;
+};
+
+#endif // SIMULATION_H

@@ -1,5 +1,5 @@
 /*
- * init.h - program initialization header
+ * helper.h - helper functions header
  *
  * Copyright © 2013 H.-P. Schadler  <hanspeter.schadler@uni-graz.at>
  *
@@ -19,11 +19,12 @@
  *
  */
 
-#ifndef INIT_H
-#define INIT_H
+#ifndef HELPER_H
+#define HELPER_H
 
-#include "globalsettings.h"
+#include "su3.h"
 
-int Init(int &argc, char *argv[], GlobalSettings &settings);
+void PrintMatrix(Su3Matrix &in);
+void PrintSettings(GlobalSettings &settings);
 
-#endif // INIT_H
+#endif // HELPER_H

@@ -1,5 +1,5 @@
 /*
- * init.h - program initialization header
+ * globalconf.h - global configartion header
  *
  * Copyright © 2013 H.-P. Schadler  <hanspeter.schadler@uni-graz.at>
  *
@@ -19,11 +19,18 @@
  *
  */
 
-#ifndef INIT_H
-#define INIT_H
+#ifndef GLOBALSETTINGS_H
+#define GLOBALSETTINGS_H
 
-#include "globalsettings.h"
+struct GlobalSettings {
+  int ns;
+  int nt;
+  int nsites;
+  int dim;
+  int nmeas;
+  int nskip;
+  int nequi;
+};
 
-int Init(int &argc, char *argv[], GlobalSettings &settings);
 
-#endif // INIT_H
+#endif // GLOBALSETTINGS_H

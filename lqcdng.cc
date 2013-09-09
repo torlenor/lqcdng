@@ -21,50 +21,22 @@
 
 #include <iostream>
 
+#include "globalsettings.h"
 #include "init.h"
 #include "su3.h"
-
-using std::cout;
-using std::endl;
-
-unsigned int Ns=4, Nt=4;
-
-void PrintMatrix(Su3Matrix &in){
-  for (unsigned int i=0;i<3;i++){
-    for (unsigned int j=0;j<3;j++){
-      cout << in.get(i,j) << " ";
-    }
-    cout << endl;
-  }
-}
+#include "helper.h"
+#include "simulation.h"
 
 int main(int argc, char **argv) {
-  std::vector<Su3Matrix*> lattice;
+  // Print help and read settings from command line
+  GlobalSettings settings;
+  Init(argc, argv, settings);
+  PrintSettings(settings);
+  std::cout << std::endl;
 
-  for (unsigned int i=0;i<Ns*Ns*Ns*Nt;i++) {
-    lattice.push_back(new Su3Matrix());
-  }
-  
-  for(std::vector<Su3Matrix*>::iterator iter=lattice.begin(); iter != lattice.end(); ++iter) {
-    for (unsigned int i=0;i<3;i++) {
-      (*iter)->set(i,i,1.0);
-    }
-  }
-
-  PrintMatrix( *lattice[0] );
-
-  Su3Matrix total;
-
-  for(std::vector<Su3Matrix*>::iterator iter=lattice.begin(); iter != lattice.end(); ++iter) {
-    add_m( *(*iter),total,total);
-  }
-
-  PrintMatrix(total);
-
-  for(std::vector<Su3Matrix*>::iterator iter=lattice.begin(); iter != lattice.end(); ++iter) {
-    // Su3Matrix* m = *iter;
-    delete *iter;
-  }
+  // Create a simulation instance
+  MCSimulation *sim1 = new MCSimulation(settings);
+  sim1->StartSimulation();
 
   return 0;  
 }

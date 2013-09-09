@@ -1,5 +1,5 @@
 /*
- * init.h - program initialization header
+ * helper.h - helper functions header
  *
  * Copyright © 2013 H.-P. Schadler  <hanspeter.schadler@uni-graz.at>
  *
@@ -19,11 +19,24 @@
  *
  */
 
-#ifndef INIT_H
-#define INIT_H
-
+#include <iostream>
+#include "su3.h"
 #include "globalsettings.h"
 
-int Init(int &argc, char *argv[], GlobalSettings &settings);
+void PrintMatrix(Su3Matrix &in){
+  for (unsigned int i=0;i<3;i++) {
+    for (unsigned int j=0;j<3;j++) {
+      std::cout << in.get(i,j) << " ";
+    }   
+    std::cout << std::endl;
+  }
+}
 
-#endif // INIT_H
+void PrintSettings(GlobalSettings &settings) {
+  std::cout << "Settings:" << std::endl
+  << "Ns = " << settings.ns << std::endl
+  << "Nt = " << settings.nt << std::endl
+  << "Measurements = " << settings.nmeas << std::endl
+  << "Skip = " << settings.nskip << std::endl;
+}
+

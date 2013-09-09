@@ -30,15 +30,22 @@ class Su3Matrix {
 		Su3Matrix();
 		~Su3Matrix();
 
-    std::complex<double> get(const unsigned int x, const unsigned int y);
-    void set(const unsigned int x, const unsigned int y, const std::complex<double> in);
+    std::complex<double> get(const int x, const int y);
+    void set(const int x, const int y, const std::complex<double> in);
+
+    void Norm(); // Normalizes the SU3 matrix
 
   private:
-    static const unsigned int kMatrixDim = 3;
+    static const int kMatrixDim = 3;
     std::vector<std::vector<std::complex<double> > > matrix_;
 };
 
-void add_m(Su3Matrix &m_in1, Su3Matrix &m_in2, Su3Matrix &m_out);
-void mult_m(Su3Matrix &m_in1, Su3Matrix &m_in2, Su3Matrix &m_out);
+void AddMatrix(Su3Matrix &m_in1, Su3Matrix &m_in2, Su3Matrix &m_out);
+void SubstactMatrix(Su3Matrix &m_in1, Su3Matrix &m_in2, Su3Matrix &m_out);
+void MultMatrixabc(Su3Matrix &m_in1, Su3Matrix &m_in2, Su3Matrix &m_out);
+void MultMatrixadagbc(Su3Matrix &m_in1, Su3Matrix &m_in2, Su3Matrix &m_out);
+void MultMatrixabdagc(Su3Matrix &m_in1, Su3Matrix &m_in2, Su3Matrix &m_out);
+void MultMatrixadagbdagc(Su3Matrix &m_in1, Su3Matrix &m_in2, Su3Matrix &m_out);
+std::complex<double> MultTraceMatrix(Su3Matrix &m_in1, Su3Matrix &m_in2);
 
 #endif // SU3_H
