@@ -72,7 +72,9 @@ int Init(int &argc, char *argv[], GlobalSettings &settings) {
   settings.nequi=10;
   settings.nmeas=10;
   settings.nskip=1;
-  
+  settings.beta=5.0;
+  settings.nhit=1;
+
   int c;
 
   while (1){

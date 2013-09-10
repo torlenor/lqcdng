@@ -40,8 +40,16 @@ class MCSimulation {
     void DeleteStorage();
     void Update(const int nskip);
 
+    double Uni();
+
+    void StapleSum(Su3Matrix &S, int mu,int x);
+    void OverOffer(Su3Matrix &Unew, Su3Matrix &Uold, Su3Matrix &stot);
+    void MetroOffer(Su3Matrix &Unew, Su3Matrix &Uold);
+
+    void Mixed();
+
     GlobalSettings settings_;
-    std::vector<Su3Matrix*> lattice_;
+    std::vector<std::vector<Su3Matrix*> > lattice_;
     std::vector<std::vector<int> > neib_;
 };
 

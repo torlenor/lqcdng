@@ -20,6 +20,8 @@
  */
 
 #include <iostream>
+#include <cstdlib>
+#include <ctime>
 
 #include "globalsettings.h"
 #include "init.h"
@@ -33,6 +35,10 @@ int main(int argc, char **argv) {
   Init(argc, argv, settings);
   PrintSettings(settings);
   std::cout << std::endl;
+
+  // Initialize random number generator
+  // TODO: Change this to something else!
+  srand (time(NULL));
 
   // Create a simulation instance
   MCSimulation *sim1 = new MCSimulation(settings);

@@ -41,7 +41,7 @@ class Su3Matrix {
 };
 
 void AddMatrix(Su3Matrix &m_in1, Su3Matrix &m_in2, Su3Matrix &m_out);
-void SubstactMatrix(Su3Matrix &m_in1, Su3Matrix &m_in2, Su3Matrix &m_out);
+void SubstractMatrix(Su3Matrix &m_in1, Su3Matrix &m_in2, Su3Matrix &m_out);
 void MultMatrixabc(Su3Matrix &m_in1, Su3Matrix &m_in2, Su3Matrix &m_out);
 void MultMatrixadagbc(Su3Matrix &m_in1, Su3Matrix &m_in2, Su3Matrix &m_out);
 void MultMatrixabdagc(Su3Matrix &m_in1, Su3Matrix &m_in2, Su3Matrix &m_out);

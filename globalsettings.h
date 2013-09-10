@@ -30,6 +30,8 @@ struct GlobalSettings {
   int nmeas;
   int nskip;
   int nequi;
+  int nhit;
+  double beta;
 };
 
 
