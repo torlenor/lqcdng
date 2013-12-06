@@ -16,7 +16,9 @@ include_directories (${LQCDNG_SOURCE_DIR})
 link_directories (${LQCDNG_BINARY_DIR})
 
 set(CMAKE_BUILD_TYPE Release)
+# set(CMAKE_BUILD_TYPE Debug)
 
+# set(CMAKE_CXX_FLAGS "-O3 -Wall -pg")        ## Optimize
 set(CMAKE_CXX_FLAGS "-O3 -Wall")        ## Optimize
 # set(CMAKE_EXE_LINKER_FLAGS "-s")  ## Strip binary
 

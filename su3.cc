@@ -1,5 +1,5 @@
 /*
- * su3.h - su3 matrix handling
+ * su3.cc - su3 matrix handling
  *
  * Copyright © 2013 H.-P. Schadler  <hanspeter.schadler@uni-graz.at>
  *
@@ -37,6 +37,10 @@ void Su3Matrix::set(const int x, const int y, const std::complex<double> in) {
 }
 
 std::complex<double> Su3Matrix::get(const int x, const int y) {
+  return matrix_[x][y];
+}
+
+std::complex<double>& Su3Matrix::at(const int x, const int y) {
   return matrix_[x][y];
 }
 
@@ -82,61 +86,50 @@ void AddMatrix(Su3Matrix &m_in1, Su3Matrix &m_in2, Su3Matrix &m_out) {
 }
 
 void SubstractMatrix(Su3Matrix &m_in1, Su3Matrix &m_in2, Su3Matrix &m_out) {
-	for (int x=0; x<3; x++) {
-		for (int y=0; y<3; y++) {
-			m_out.set(x, y, m_in1.get(x, y) - m_in2.get(x, y));
+	for (int x=0; x<3; ++x) {
+		for (int y=0; y<3; ++y) {
+			m_out.at(x, y) = m_in1.get(x, y) - m_in2.get(x, y);
 		}
 	}
 }
 
 void MultMatrixabc(Su3Matrix &m_in1, Su3Matrix &m_in2, Su3Matrix &m_out) {
-  std::complex<double> multvar = 0;
-	for (int x=0; x<3; x++) {
-		for (int y=0; y<3; y++) {
-      multvar = 0;
-		  for (int k=0;k<3; k++) {
-        multvar += m_in1.get(x,k)*m_in2.get(k,y);
+	for (int x=0; x<3; ++x) {
+		for (int y=0; y<3; ++y) {
+      m_out.at(x,y)=m_in1.at(x,0)*m_in2.at(0,y);
+		  for (int k=1;k<3; ++k) {
+        m_out.at(x,y) += m_in1.at(x,k)*m_in2.at(k,y);
       }
-			m_out.set(x, y, multvar);
 		}
 	}
 }
 
 void MultMatrixadagbc(Su3Matrix &m_in1, Su3Matrix &m_in2, Su3Matrix &m_out) {
-  std::complex<double> multvar = 0;
-	for (int x=0; x<3; x++) {
-		for (int y=0; y<3; y++) {
-      multvar = 0;
-		  for (int k=0;k<3; k++) {
-        multvar += conj(m_in1.get(k,x))*m_in2.get(k,y);
+	for (int x=0; x<3; ++x) {
+		for (int y=0; y<3; ++y) {
+      m_out.at(x,y) = conj(m_in1.at(0,x))*m_in2.at(0,y);
+		  for (int k=1;k<3; ++k) {
+        m_out.at(x,y) += conj(m_in1.at(k,x))*m_in2.at(k,y);
       }
-			m_out.set(x, y, multvar);
 		}
 	}
 }
 
 void MultMatrixabdagc(Su3Matrix &m_in1, Su3Matrix &m_in2, Su3Matrix &m_out) {
-  std::complex<double> multvar = 0;
-	for (int x=0; x<3; x++) {
-		for (int y=0; y<3; y++) {
-      multvar = 0;
-		  for (int k=0;k<3; k++) {
-        multvar += m_in1.get(x,k)*conj(m_in2.get(y,k));
-      }
-			m_out.set(x, y, multvar);
+	for (int x=0; x<3; ++x) {
+		for (int y=0; y<3; ++y) {
+      m_out.at(x,y) = m_in1.at(x,0)*conj(m_in2.at(y,0)) + m_in1.at(x,1)*conj(m_in2.at(y,1))  + m_in1.at(x,2)*conj(m_in2.at(y,2));
 		}
 	}
 }
 
 void MultMatrixadagbdagc(Su3Matrix &m_in1, Su3Matrix &m_in2, Su3Matrix &m_out) {
-  std::complex<double> multvar = 0;
-	for (int x=0; x<3; x++) {
-		for (int y=0; y<3; y++) {
-      multvar = 0;
-		  for (int k=0;k<3; k++) {
-        multvar += conj(m_in1.get(k,x))*conj(m_in2.get(y,k));
+	for (int x=0; x<3; ++x) {
+		for (int y=0; y<3; ++y) {
+      m_out.at(x,y) = conj(m_in1.at(0,x))*conj(m_in2.at(y,0));
+		  for (int k=1;k<3; ++k) {
+        m_out.at(x,y) += conj(m_in1.at(k,x))*conj(m_in2.at(y,k));
       }
-			m_out.set(x, y, multvar);
 		}
 	}
 }
@@ -145,7 +138,7 @@ std::complex<double> MultTraceMatrix(Su3Matrix &m_in1, Su3Matrix &m_in2) {
   std::complex<double> tr=0;
   for (int k=0; k<3; k++) {
 		for (int i=0; i<3; i++) {
-      tr += m_in1.get(i,k)*m_in2.get(k,i);
+      tr += m_in1.at(i,k)*m_in2.at(k,i);
     }
   }
 

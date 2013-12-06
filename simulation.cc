@@ -250,6 +250,48 @@ void MCSimulation::Mixed() {
   }
 }
 
+std::complex<double> MCSimulation::MeasPoll() {
+  // Calculates the Polyakov loop spatial average
+  std::complex<double> poll, trace;
+  poll=std::complex<double> (0,0);
+  trace=std::complex<double> (0,0);
+
+  Su3Matrix up, uu, upaux;
+
+  int is0=0;
+  int i4=0;
+
+  for(int i1=0;i1<settings_.ns;i1++){
+    for(int i2=0;i2<settings_.ns;i2++){
+      for(int i3=0;i3<settings_.ns;i3++){
+        i4 = 0;
+        is0 = i1 + i2*settings_.ns + i3*settings_.ns*settings_.ns + i4*settings_.ns*settings_.ns*settings_.ns;
+
+        up = *lattice_[is0][3];
+
+        for(i4=1;i4<settings_.nt-1;i4++){
+          is0 = i1 + i2*settings_.ns + i3*settings_.ns*settings_.ns + i4*settings_.ns*settings_.ns*settings_.ns;
+          uu = *lattice_[is0][3];
+          MultMatrixabc(up, uu, upaux);
+          up = upaux;
+        }
+
+        i4 = settings_.nt-1;
+        is0 = i1 + i2*settings_.ns + i3*settings_.ns*settings_.ns + i4*settings_.ns*settings_.ns*settings_.ns;
+
+        uu = *lattice_[is0][3];
+        trace = MultTraceMatrix(up,uu);
+
+        poll = poll + trace;
+      }
+    }
+  }
+
+  poll = poll/((double)3.0*settings_.ns*settings_.ns*settings_.ns);
+
+  return poll;
+}
+
 void MCSimulation::Update(const int nskip) {
   for (int skip=0; skip<nskip; skip++) {  
     // TODO: Update procedures
@@ -268,8 +310,9 @@ int MCSimulation::StartSimulation() {
   Update(settings_.nequi);;
 
   for (int n=0; n<settings_.nmeas; n++) {
-    std::cout << "Meas " << n << std::endl;
+    // std::cout << "Meas " << n << std::endl;
     Update(settings_.nskip);
+    std::cout << "Poll = " << MeasPoll() << std::endl;
   }
 
   DeleteStorage();

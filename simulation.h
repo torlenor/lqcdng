@@ -46,6 +46,8 @@ class MCSimulation {
     void OverOffer(Su3Matrix &Unew, Su3Matrix &Uold, Su3Matrix &stot);
     void MetroOffer(Su3Matrix &Unew, Su3Matrix &Uold);
 
+    std::complex<double> MeasPoll();
+
     void Mixed();
 
     GlobalSettings settings_;

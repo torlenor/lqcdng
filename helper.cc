@@ -36,7 +36,9 @@ void PrintSettings(GlobalSettings &settings) {
   std::cout << "Settings:" << std::endl
   << "Ns = " << settings.ns << std::endl
   << "Nt = " << settings.nt << std::endl
+  << "Equilibrations = " << settings.nequi << std::endl
   << "Measurements = " << settings.nmeas << std::endl
-  << "Skip = " << settings.nskip << std::endl;
+  << "Skip = " << settings.nskip << std::endl
+  << "Beta = " << settings.beta << std::endl;
 }
 

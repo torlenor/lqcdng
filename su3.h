@@ -31,6 +31,7 @@ class Su3Matrix {
 		~Su3Matrix();
 
     std::complex<double> get(const int x, const int y);
+    std::complex<double>& at(const int x, const int y);
     void set(const int x, const int y, const std::complex<double> in);
 
     void Norm(); // Normalizes the SU3 matrix
