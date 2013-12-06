@@ -19,15 +19,15 @@
  *
  */
 
-#include <iostream>
 #include <cstdlib>
 #include <ctime>
+#include <iostream>
 
 #include "globalsettings.h"
-#include "init.h"
-#include "su3.h"
 #include "helper.h"
+#include "init.h"
 #include "simulation.h"
+#include "su3.h"
 
 int main(int argc, char **argv) {
   // Print help and read settings from command line
