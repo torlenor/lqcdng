@@ -35,8 +35,7 @@ int Init(int &argc, char *argv[], GlobalSettings &settings) {
       "  -n, --nmeas NMEAS          number of configurations (default = 1)\n"
       "  -k, --nskip NSKIP          number of skipped configurations (default = 0)\n"
       "  -e, --nequi NEQUI          number of equilibration sweeps (default = 0)\n"
-      "  --3d                       write 3dcluster data files\n"
-      "  -m, --memory               drop clusterdata vectors after calculating the observables\n"
+      "  -b, --beta BETA            inverse gauge coupling (default = 5.6)\n"
       "\n"  
       "  -h  --help                 display this help and exit\n"
       "  -v  --version              output version information and exit\n"
@@ -87,6 +86,7 @@ int Init(int &argc, char *argv[], GlobalSettings &settings) {
 		  {"nmeas", required_argument, 0, 'n'},
 		  {"nskip", required_argument, 0, 'k'},
 		  {"nequi", required_argument, 0, 'e'},
+		  {"beta", required_argument, 0, 'b'},
 		  {"3d", no_argument, 0, 0},
 		  /* These options set a flag. */
 		  {"help", no_argument, 0, 'h'},
@@ -97,7 +97,7 @@ int Init(int &argc, char *argv[], GlobalSettings &settings) {
 	  /* getopt_long stores the option index here. */
 	  int option_index = 0;
 
-	  c = getopt_long (argc, argv, "s:t:n:k:e:hv",
+	  c = getopt_long (argc, argv, "s:t:n:k:e:b:hv",
 	  long_options, &option_index);
 
 	  /* Detect the end of the options. */
@@ -135,7 +135,9 @@ int Init(int &argc, char *argv[], GlobalSettings &settings) {
       case 'e':
 			  settings.nequi = std::atoi(optarg);
 			  break;
-
+      case 'b':
+			  settings.beta = std::atof(optarg);
+			  break;
 		  case 'v':
         std::cout << std::endl 
           << "lqcd.x " << MAJOR_VERSION << "." << MINOR_VERSION << "." 

@@ -1,5 +1,5 @@
 /*
- * helper.h - helper functions header
+ * helper.cc - helper functions
  *
  * Copyright © 2013 H.-P. Schadler  <hanspeter.schadler@uni-graz.at>
  *
