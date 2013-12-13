@@ -19,13 +19,14 @@
  *
  */
 
-#include <iostream>
-#include <cstdlib>
+#include "simulation.h"
 
-#include "su3.h"
+#include <cstdlib>
+#include <iostream>
+
 #include "globalsettings.h"
 #include "helper.h"
-#include "simulation.h"
+#include "su3.h"
 
 MCSimulation::MCSimulation(GlobalSettings &settings) {
   settings_ = settings;
@@ -312,7 +313,9 @@ int MCSimulation::StartSimulation() {
   for (int n=0; n<settings_.nmeas; n++) {
     // std::cout << "Meas " << n << std::endl;
     Update(settings_.nskip);
-    std::cout << "Poll = " << MeasPoll() << std::endl;
+    if (settings_.meas == true) {
+      std::cout << "Poll = " << MeasPoll() << std::endl;
+    }
   }
 
   DeleteStorage();

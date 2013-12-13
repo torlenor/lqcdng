@@ -22,6 +22,7 @@
 #ifndef HELPER_H
 #define HELPER_H
 
+#include "globalsettings.h"
 #include "su3.h"
 
 void PrintMatrix(Su3Matrix &in);

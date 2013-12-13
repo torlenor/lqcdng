@@ -32,6 +32,8 @@ struct GlobalSettings {
   int nequi;
   int nhit;
   double beta;
+
+  bool meas;
 };
 
 

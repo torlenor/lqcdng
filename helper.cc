@@ -19,9 +19,12 @@
  *
  */
 
+#include "helper.h"
+
 #include <iostream>
-#include "su3.h"
+
 #include "globalsettings.h"
+#include "su3.h"
 
 void PrintMatrix(Su3Matrix &in){
   for (unsigned int i=0;i<3;i++) {
