@@ -22,5 +22,18 @@
 #ifndef STORAGE_H
 #define STORAGE_H
 
+#include <vector>
+
+template <class T>
+class LatticeStorage{
+  public:
+    // Constructor/Deconstructor
+    LatticeStorage(int dim, int *len, bool hasLinks, bool hasSites);
+    ~LatticeStorage();
+
+  private:
+    std::vector<T> storage_;
+};
+
 
 #endif // STORAGE_H

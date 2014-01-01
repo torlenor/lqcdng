@@ -26,7 +26,7 @@
 #include "globalsettings.h"
 #include "helper.h"
 #include "init.h"
-#include "simulation.h"
+#include "puregauge.h"
 #include "su3.h"
 
 int main(int argc, char **argv) {

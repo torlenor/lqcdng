@@ -19,7 +19,7 @@
  *
  */
 
-#include "simulation.h"
+#include "puregauge.h"
 
 #include <cstdlib>
 #include <iostream>
