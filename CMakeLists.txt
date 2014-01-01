@@ -19,7 +19,7 @@ set(CMAKE_BUILD_TYPE Release)
 # set(CMAKE_BUILD_TYPE Debug)
 
 # set(CMAKE_CXX_FLAGS "-O3 -Wall -pg")        ## Optimize
-set(CMAKE_CXX_FLAGS "-O3 -Wall")        ## Optimize
+set(CMAKE_CXX_FLAGS "-O2 -Wall")        ## Optimize
 # set(CMAKE_EXE_LINKER_FLAGS "-s")  ## Strip binary
 
 # Add executable called "helloDemo" that is built from the source files

@@ -307,14 +307,18 @@ int MCSimulation::StartSimulation() {
   PrepareStorage();
 
   // Equilibration
-  std::cout << "Equi..." << std::endl;
-  Update(settings_.nequi);;
+  std::cout << "Equilibration... " << std::endl;
+  Update(settings_.nequi);
+  std::cout << "Equilibration sweeps finished. Starting measurements..." << std::endl << std::endl;
 
   for (int n=0; n<settings_.nmeas; n++) {
-    // std::cout << "Meas " << n << std::endl;
+    std::cout << "Measurement " << n+1 << std::endl;
     Update(settings_.nskip);
     if (settings_.meas == true) {
       std::cout << "Poll = " << MeasPoll() << std::endl;
+    }
+    if (settings_.writeconf == true) {
+      std::cout << "Writing config..." << std::endl;
     }
   }
 

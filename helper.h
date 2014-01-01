@@ -25,7 +25,9 @@
 #include "globalsettings.h"
 #include "su3.h"
 
+// Writes an SU(3) matrix in to STDOUT
 void PrintMatrix(Su3Matrix &in);
+// Writes global settings settings to STDOUT
 void PrintSettings(GlobalSettings &settings);
 
 #endif // HELPER_H

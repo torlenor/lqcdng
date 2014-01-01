@@ -34,6 +34,7 @@ struct GlobalSettings {
   double beta;
 
   bool meas;
+  bool writeconf;
 };
 
 

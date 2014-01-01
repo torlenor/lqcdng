@@ -16,8 +16,8 @@ else
 	exit
 fi
 echo "Performing test run..."
-echo "Calling './lqcdng -s 6 -t 4 -b 5.00 -n 10 -k 1 -e 10' ..."
-./lqcdng -s 6 -t 4 -b 5.00 -n 10 -k 1 -e 10
+echo "Calling './lqcdng -s 8 -t 4 -b 5.00 -n 10 -k 5 -e 10 -c -m' ..."
+./lqcdng -s 8 -t 4 -b 5.00 -n 10 -k 5 -e 10 -c -m
 echo "Cleaning up..."
 cleanup
 cd ..

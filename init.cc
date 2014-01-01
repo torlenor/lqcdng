@@ -38,6 +38,7 @@ int Init(int &argc, char *argv[], GlobalSettings &settings) {
       "  -b, --beta BETA            inverse gauge coupling (default = 5.6)\n"
       "\n"  
       "  -m  --meas                 perform basic measurements and write them to file\n"
+      "  -c  --writeconf            writes configurations to disk\n"
       "\n"  
       "  -h  --help                 display this help and exit\n"
       "  -v  --version              output version information and exit\n"
@@ -76,6 +77,7 @@ int Init(int &argc, char *argv[], GlobalSettings &settings) {
   settings.beta=5.6;
   settings.nhit=1;
   settings.meas=false;
+  settings.writeconf=false;
 
   int c;
 
@@ -91,6 +93,7 @@ int Init(int &argc, char *argv[], GlobalSettings &settings) {
 		  {"nequi", required_argument, 0, 'e'},
 		  {"beta", required_argument, 0, 'b'},
 		  {"meas", no_argument, 0, 'm'},
+		  {"writeconf", no_argument, 0, 'c'},
 		  /* These options set a flag. */
 		  {"help", no_argument, 0, 'h'},
 		  {"version", no_argument, 0, 'v'},
@@ -100,7 +103,7 @@ int Init(int &argc, char *argv[], GlobalSettings &settings) {
 	  /* getopt_long stores the option index here. */
 	  int option_index = 0;
 
-	  c = getopt_long (argc, argv, "s:t:n:k:e:b:mhv",
+	  c = getopt_long (argc, argv, "s:t:n:k:e:b:mchv",
 	  long_options, &option_index);
 
 	  /* Detect the end of the options. */
@@ -138,12 +141,19 @@ int Init(int &argc, char *argv[], GlobalSettings &settings) {
       case 'e':
 			  settings.nequi = std::atoi(optarg);
 			  break;
+      
       case 'b':
 			  settings.beta = std::atof(optarg);
 			  break;
+      
       case 'm':
         settings.meas = true;
         break;
+      
+      case 'c':
+        settings.writeconf = true;
+        break;
+
 		  case 'v':
         std::cout << std::endl 
           << "lqcd.x " << MAJOR_VERSION << "." << MINOR_VERSION << "." 
