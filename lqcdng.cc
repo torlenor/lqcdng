@@ -27,6 +27,7 @@
 #include "helper.h"
 #include "init.h"
 #include "puregauge.h"
+#include "storage.hpp"
 #include "su3.h"
 
 int main(int argc, char **argv) {
@@ -35,6 +36,8 @@ int main(int argc, char **argv) {
   Init(argc, argv, settings);
   PrintSettings(settings);
   std::cout << std::endl;
+
+  LatticeStorage<double, double> storage1(4,4,4,4,true,true);
 
   // Initialize random number generator
   // TODO: Change this to something else!

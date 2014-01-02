@@ -19,13 +19,13 @@ set(CMAKE_BUILD_TYPE Release)
 # set(CMAKE_BUILD_TYPE Debug)
 
 # set(CMAKE_CXX_FLAGS "-O3 -Wall -pg")        ## Optimize
-set(CMAKE_CXX_FLAGS "-O2 -Wall")        ## Optimize
+set(CMAKE_CXX_FLAGS "-O2 -Wall -DDEBUG")        ## Optimize
 # set(CMAKE_EXE_LINKER_FLAGS "-s")  ## Strip binary
 
 # Add executable called "helloDemo" that is built from the source files
 # "demo.cxx" and "demo_b.cxx". The extensions are automatically found.
 # add_executable (calcalljack calcalljack.cpp calcint.cpp calcjack.cpp)
-add_executable (lqcdng_puregauge lqcdng.cc su3.cc init.cc storage.cc helper.cc puregauge.cc)
+add_executable (lqcdng_puregauge lqcdng.cc su3.cc init.cc helper.cc puregauge.cc)
 
 # Link the executable to the Hello library.
 # target_link_libraries (calcalljack calcint calcjack) 
