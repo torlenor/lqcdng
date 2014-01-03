@@ -1,5 +1,5 @@
 /*
- * lqcdnq.cc - Lattice QCD Monte Carlo main functions
+ * puresu2gauge.cc - Pure SU(2) Monte Carlo simulation
  *
  * Copyright © 2013 H.-P. Schadler  <hanspeter.schadler@uni-graz.at>
  *
@@ -25,17 +25,14 @@
 #include <vector>
 
 #include "globalsettings.h"
-#include "helper.h"
 #include "init.h"
 #include "simulationkernels/puresu2gauge.h"
-#include "storage.hpp"
-#include "su2.h"
 
 int main(int argc, char **argv) {
   // Print help and read settings from command line
   GlobalSettings settings;
   Init(argc, argv, settings);
-  PrintSettings(settings);
+  settings.PrintSettings();
   std::cout << std::endl;
 
   // Initialize random number generator

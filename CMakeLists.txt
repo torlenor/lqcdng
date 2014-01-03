@@ -25,8 +25,8 @@ set(CMAKE_CXX_FLAGS "-O2 -Wall -DDEBUG")        ## Optimize
 # Add executable called "helloDemo" that is built from the source files
 # "demo.cxx" and "demo_b.cxx". The extensions are automatically found.
 # add_executable (calcalljack calcalljack.cpp calcint.cpp calcjack.cpp)
-add_executable (puresu2gauge puresu2gauge.cc su2.cc init.cc helper.cc simulationkernels/genericsimclass.cc simulationkernels/puresu2gauge.cc)
-add_executable (puresu3gauge puresu3gauge.cc su3.cc init.cc helper.cc simulationkernels/genericsimclass.cc simulationkernels/puresu3gauge.cc)
+add_executable (puresu2gauge puresu2gauge.cc globalsettings.cc su2.cc init.cc simulationkernels/genericsimclass.cc simulationkernels/puresu2gauge.cc)
+add_executable (puresu3gauge puresu3gauge.cc globalsettings.cc su3.cc init.cc simulationkernels/genericsimclass.cc simulationkernels/puresu3gauge.cc)
 
 # Link the executable to the Hello library.
 # target_link_libraries (calcalljack calcint calcjack) 

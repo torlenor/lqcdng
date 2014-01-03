@@ -1,5 +1,5 @@
 /*
- * lqcdnq.cc - Lattice QCD Monte Carlo main functions
+ * puresu3gauge.cc - Pure SU(3) Monte Carlo simulation
  *
  * Copyright © 2013 H.-P. Schadler  <hanspeter.schadler@uni-graz.at>
  *
@@ -25,31 +25,14 @@
 #include <vector>
 
 #include "globalsettings.h"
-#include "helper.h"
 #include "init.h"
 #include "simulationkernels/puresu3gauge.h"
-#include "storage.hpp"
-#include "su3.h"
 
 int main(int argc, char **argv) {
   // Print help and read settings from command line
   GlobalSettings settings;
   Init(argc, argv, settings);
-  PrintSettings(settings);
-  std::cout << std::endl;
-
-  LatticeStorage<Su3Matrix, double> storage1(4,4,4,4,true,true);
-
-  // LatticeStorage<std::vector<double>, double> storage1(4,4,4,4,true,true);
-  /*for(unsigned int i=0; i<4*4*4*4; i++) {
-    for(unsigned int mu=0; mu<4; mu++) {
-      storage1.at(i, mu).resize(3*3);
-    }
-  }*/
-
-  storage1.at(1,1).set(1,1,4.0);
-  // std::cout << "Site at 1: " << storage1.at(1) << std::endl;
-  std::cout << "Link at 1,2: " << storage1.at(1,1).get(1,1) <<  std::endl;
+  settings.PrintSettings();
   std::cout << std::endl;
 
   // Initialize random number generator

@@ -1,5 +1,5 @@
 /*
- * globalsettings.h - global configartion - header
+ * globalsettings.cc - global configuration - header
  *
  * Copyright © 2013 H.-P. Schadler  <hanspeter.schadler@uni-graz.at>
  *
@@ -19,29 +19,17 @@
  *
  */
 
-#ifndef GLOBALSETTINGS_H
-#define GLOBALSETTINGS_H
+#include "globalsettings.h"
 
-class GlobalSettings {
-  public:
-    GlobalSettings(){};
-    ~GlobalSettings(){};
-  
-    void PrintSettings();
-  
-    int ns;
-    int nt;
-    int nsites;
-    int dim;
-    int nmeas;
-    int nskip;
-    int nequi;
-    int nhit;
-    double beta;
+#include <iostream>
+ 
+void GlobalSettings::PrintSettings() {
+  std::cout << "Settings:" << std::endl
+  << "Ns = " << ns << std::endl
+  << "Nt = " << nt << std::endl
+  << "Equilibrations = " << nequi << std::endl
+  << "Measurements = " << nmeas << std::endl
+  << "Skip = " << nskip << std::endl
+  << "Beta = " << beta << std::endl;
+}
 
-    bool meas;
-    bool writeconf;
-};
-
-
-#endif // GLOBALSETTINGS_H
