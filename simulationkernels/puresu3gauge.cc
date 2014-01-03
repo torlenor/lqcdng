@@ -20,7 +20,7 @@
  *
  */
 
-#include "puregauge.h"
+#include "puresu3gauge.h"
 
 #include <cstdlib>
 #include <iostream>
@@ -29,7 +29,7 @@
 #include "helper.h"
 #include "su3.h"
 
-void PureGaugeSim::StapleSum(Su3Matrix &S, int mu,int x) {
+void PureSU3GaugeSim::StapleSum(Su3Matrix &S, int mu,int x) {
   int xpmu,xpnu,xmnupmu,xmnu;
   Su3Matrix U12, U123;
 
@@ -61,7 +61,7 @@ void PureGaugeSim::StapleSum(Su3Matrix &S, int mu,int x) {
   }
 }
 
-void PureGaugeSim::MetroOffer(Su3Matrix &Unew, Su3Matrix &Uold) {
+void PureSU3GaugeSim::MetroOffer(Su3Matrix &Unew, Su3Matrix &Uold) {
   // Generates a trial matrix for the metropolis update
   Su3Matrix change;
   double phi, rho, rx, ry; 
@@ -87,7 +87,7 @@ void PureGaugeSim::MetroOffer(Su3Matrix &Unew, Su3Matrix &Uold) {
   }    
 }
 
-void PureGaugeSim::OverOffer(Su3Matrix &Unew, Su3Matrix &Uold, Su3Matrix &stot) {
+void PureSU3GaugeSim::OverOffer(Su3Matrix &Unew, Su3Matrix &Uold, Su3Matrix &stot) {
   // Generates a overrelaxation trial matrix
   Su3Matrix gtem, g0;
 
@@ -99,7 +99,7 @@ void PureGaugeSim::OverOffer(Su3Matrix &Unew, Su3Matrix &Uold, Su3Matrix &stot) 
   MultMatrixadagbc(g0, gtem, Unew);
 }
 
-void PureGaugeSim::Mixed() {
+void PureSU3GaugeSim::Mixed() {
   Su3Matrix uold, ustap0;
   Su3Matrix utrial, udiff, betasum;
   double b03 = -settings_.beta/(double)3.0; // MODIFIED FOR SU(N=md), md=2,3
@@ -143,7 +143,7 @@ void PureGaugeSim::Mixed() {
   }
 }
 
-std::complex<double> PureGaugeSim::MeasPoll() {
+std::complex<double> PureSU3GaugeSim::MeasPoll() {
   // Calculates the Polyakov loop spatial average
   std::complex<double> poll, trace;
   poll=std::complex<double> (0,0);
@@ -185,7 +185,7 @@ std::complex<double> PureGaugeSim::MeasPoll() {
   return poll;
 }
 
-void PureGaugeSim::Update(const int nskip) {
+void PureSU3GaugeSim::Update(const int nskip) {
   for (int skip=0; skip<nskip; skip++) {  
     // TODO: Update procedures
     std::cout << "\r Sweep " << skip+1 << " of " << nskip << std::flush;
@@ -194,6 +194,6 @@ void PureGaugeSim::Update(const int nskip) {
   std::cout << std::endl;
 }
 
-void PureGaugeSim::Measurement() {
+void PureSU3GaugeSim::Measurement() {
   std::cout << MeasPoll() << std::endl;
 }

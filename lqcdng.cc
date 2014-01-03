@@ -27,7 +27,7 @@
 #include "globalsettings.h"
 #include "helper.h"
 #include "init.h"
-#include "simulationkernels/puregauge.h"
+#include "simulationkernels/puresu3gauge.h"
 #include "storage.hpp"
 #include "su3.h"
 
@@ -57,7 +57,7 @@ int main(int argc, char **argv) {
   srand (time(NULL));
 
   // Create a simulation instance
-  PureGaugeSim *sim1 = new PureGaugeSim(settings);
+  PureSU3GaugeSim *sim1 = new PureSU3GaugeSim(settings);
   sim1->StartSimulation();
 
   return 0;  

@@ -1,5 +1,5 @@
 /*
- * puregaugesim.h - class for pure SU(3) gauge sim inherited from
+ * puresu3gaugesim.h - class for pure SU(3) gauge sim inherited from
  * GenericSimClass - header
  *
  * Copyright © 2013 H.-P. Schadler  <hanspeter.schadler@uni-graz.at>
@@ -20,8 +20,8 @@
  *
  */
 
-#ifndef PUREGAUGESIM_H
-#define PUREGAUGESIM_H
+#ifndef PURESU3GAUGESIM_H
+#define PURESU3GAUGESIM_H
 
 #include <vector>
 
@@ -31,9 +31,9 @@
 #include "storage.hpp"
 #include "su3.h"
 
-class PureGaugeSim : public GenericSimClass {
+class PureSU3GaugeSim : public GenericSimClass {
   public:
-    PureGaugeSim(GlobalSettings &settings) : GenericSimClass(settings){};
+    PureSU3GaugeSim(GlobalSettings &settings) : GenericSimClass(settings){};
 
   private:
     void Update(const int nskip);
@@ -48,4 +48,4 @@ class PureGaugeSim : public GenericSimClass {
     void Mixed();
 };
 
-#endif // PUREGAUGESIM_H
+#endif // PURESU3GAUGESIM_H
