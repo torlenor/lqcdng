@@ -1,5 +1,6 @@
 /*
- * simulation.h - main simulation functions header
+ * puregaugesim.h - class for pure SU(3) gauge sim inherited from
+ * GenericSimClass - header
  *
  * Copyright © 2013 H.-P. Schadler  <hanspeter.schadler@uni-graz.at>
  *
@@ -19,41 +20,32 @@
  *
  */
 
-#ifndef SIMULATION_H
-#define SIMULATION_H
+#ifndef PUREGAUGESIM_H
+#define PUREGAUGESIM_H
 
 #include <vector>
+
+#include "genericsimclass.h"
 
 #include "globalsettings.h"
 #include "storage.hpp"
 #include "su3.h"
 
-class MCSimulation {
+class PureGaugeSim : public GenericSimClass {
   public:
-    MCSimulation(GlobalSettings &settings);
-    ~MCSimulation();
-
-    int StartSimulation();
+    PureGaugeSim(GlobalSettings &settings) : GenericSimClass(settings){};
 
   private:
-    void PrepareNeib();
-    void PrepareStorage();
-    void DeleteStorage();
     void Update(const int nskip);
-
-    double Uni();
 
     void StapleSum(Su3Matrix &S, int mu,int x);
     void OverOffer(Su3Matrix &Unew, Su3Matrix &Uold, Su3Matrix &stot);
     void MetroOffer(Su3Matrix &Unew, Su3Matrix &Uold);
 
+    void Measurement();
     std::complex<double> MeasPoll();
 
     void Mixed();
-
-    GlobalSettings settings_;
-    std::vector<std::vector<Su3Matrix*> > lattice_;
-    std::vector<std::vector<int> > neib_;
 };
 
-#endif // SIMULATION_H
+#endif // PUREGAUGESIM_H

@@ -22,11 +22,12 @@
 #include <cstdlib>
 #include <ctime>
 #include <iostream>
+#include <vector>
 
 #include "globalsettings.h"
 #include "helper.h"
 #include "init.h"
-#include "puregauge.h"
+#include "simulationkernels/puregauge.h"
 #include "storage.hpp"
 #include "su3.h"
 
@@ -37,14 +38,26 @@ int main(int argc, char **argv) {
   PrintSettings(settings);
   std::cout << std::endl;
 
-  LatticeStorage<double, double> storage1(4,4,4,4,true,true);
+  LatticeStorage<Su3Matrix, double> storage1(4,4,4,4,true,true);
+
+  // LatticeStorage<std::vector<double>, double> storage1(4,4,4,4,true,true);
+  /*for(unsigned int i=0; i<4*4*4*4; i++) {
+    for(unsigned int mu=0; mu<4; mu++) {
+      storage1.at(i, mu).resize(3*3);
+    }
+  }*/
+
+  storage1.at(1,1).set(1,1,4.0);
+  // std::cout << "Site at 1: " << storage1.at(1) << std::endl;
+  std::cout << "Link at 1,2: " << storage1.at(1,1).get(1,1) <<  std::endl;
+  std::cout << std::endl;
 
   // Initialize random number generator
   // TODO: Change this to something else!
   srand (time(NULL));
 
   // Create a simulation instance
-  MCSimulation *sim1 = new MCSimulation(settings);
+  PureGaugeSim *sim1 = new PureGaugeSim(settings);
   sim1->StartSimulation();
 
   return 0;  

@@ -19,11 +19,13 @@
  *
  */
 
-#ifndef STORAGE_H
-#define STORAGE_H
+#ifndef STORAGE_HPP
+#define STORAGE_HPP
 
+#include <stdlib.h>
 #include <vector>
 #ifdef DEBUG
+#include <stdio.h> 
 #include <iostream>
 #endif
 
@@ -34,8 +36,8 @@ class LatticeStorage{
     LatticeStorage(int len1, int len2, int len3, int len4, bool hasLinks, bool hasSites);
     ~LatticeStorage();
 
-    TS at(int is);
-    TL at(int is, int mu);
+    TS& at(int is);
+    TL& at(int is, int mu);
 
   private:
     std::vector<TL> linkstorage_;
@@ -80,4 +82,26 @@ LatticeStorage<TL, TS>::~LatticeStorage() {
 
 }
 
-#endif // STORAGE_H
+template <class TL, class TS>
+TL& LatticeStorage<TL, TS>::at(int is, int mu) {
+  #ifdef DEBUG
+    if (hasLinks_ == false) {
+      fputs ("ERROR: Wanted to access links in a nonlink storage!\n",stderr);
+      abort();
+    }
+  #endif
+  return linkstorage_.at(is*mu);
+}
+
+template <class TL, class TS>
+TS& LatticeStorage<TL, TS>::at(int is) {
+  #ifdef DEBUG
+    if (hasSites_ == false) {
+      fputs ("ERROR: Wanted to access sites in a nonsite storage!\n",stderr);
+      abort();
+    }
+  #endif
+  return sitestorage_.at(is);
+}
+
+#endif // STORAGE_HPP
