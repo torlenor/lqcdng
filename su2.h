@@ -19,34 +19,36 @@
  *
  */
 
-#ifndef SU3_H
-#define SU3_H
+#ifndef SU2_H
+#define SU2_H
 
 #include<complex>
 #include<vector>
 
-class Su3Matrix {
+class Su2Matrix {
 	public:
-		Su3Matrix();
-		~Su3Matrix();
+		Su2Matrix();
+		~Su2Matrix();
 
     std::complex<double> get(const int x, const int y);
     std::complex<double>& at(const int x, const int y);
     void set(const int x, const int y, const std::complex<double> in);
 
-    void Norm(); // Normalizes the SU3 matrix
+    void Norm(); // Normalizes the SU2 matrix
+    
+    void print(Su2Matrix &in); // Prints the matrix to STDOUT
 
   private:
     static const int kMatrixDim = 3;
     std::vector<std::vector<std::complex<double> > > matrix_;
 };
 
-void AddMatrix(Su3Matrix &m_in1, Su3Matrix &m_in2, Su3Matrix &m_out);
-void SubstractMatrix(Su3Matrix &m_in1, Su3Matrix &m_in2, Su3Matrix &m_out);
-void MultMatrixabc(Su3Matrix &m_in1, Su3Matrix &m_in2, Su3Matrix &m_out);
-void MultMatrixadagbc(Su3Matrix &m_in1, Su3Matrix &m_in2, Su3Matrix &m_out);
-void MultMatrixabdagc(Su3Matrix &m_in1, Su3Matrix &m_in2, Su3Matrix &m_out);
-void MultMatrixadagbdagc(Su3Matrix &m_in1, Su3Matrix &m_in2, Su3Matrix &m_out);
-std::complex<double> MultTraceMatrix(Su3Matrix &m_in1, Su3Matrix &m_in2);
+void AddMatrix(Su2Matrix &m_in1, Su2Matrix &m_in2, Su2Matrix &m_out);
+void SubstractMatrix(Su2Matrix &m_in1, Su2Matrix &m_in2, Su2Matrix &m_out);
+void MultMatrixabc(Su2Matrix &m_in1, Su2Matrix &m_in2, Su2Matrix &m_out);
+void MultMatrixadagbc(Su2Matrix &m_in1, Su2Matrix &m_in2, Su2Matrix &m_out);
+void MultMatrixabdagc(Su2Matrix &m_in1, Su2Matrix &m_in2, Su2Matrix &m_out);
+void MultMatrixadagbdagc(Su2Matrix &m_in1, Su2Matrix &m_in2, Su2Matrix &m_out);
+std::complex<double> MultTraceMatrix(Su2Matrix &m_in1, Su2Matrix &m_in2);
 
-#endif // SU3_H
+#endif // SU2_H

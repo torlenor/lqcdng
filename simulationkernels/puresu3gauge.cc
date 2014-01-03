@@ -197,3 +197,35 @@ void PureSU3GaugeSim::Update(const int nskip) {
 void PureSU3GaugeSim::Measurement() {
   std::cout << MeasPoll() << std::endl;
 }
+
+void PureSU3GaugeSim::PrepareStorage() {
+  lattice_.resize(settings_.nsites);
+  for (int i=0; i<settings_.nsites; i++) {
+    for(int d=0; d<2*settings_.dim; d++) {
+      lattice_[i].push_back(new Su3Matrix());
+    }
+  }
+ 
+  // Set all links to unit matrix 
+  std::vector<std::vector<Su3Matrix*> >::iterator site_iter;
+  std::vector<Su3Matrix*>::iterator direction_iter;
+
+  for (site_iter=lattice_.begin(); site_iter != lattice_.end(); ++site_iter) {
+    for (direction_iter=site_iter->begin(); direction_iter != site_iter->end(); ++direction_iter) {
+      for (unsigned int i=0; i<3; i++) {
+        (*direction_iter)->set(i,i,1.0);
+      }   
+    }
+  }
+}
+
+void PureSU3GaugeSim::DeleteStorage() {
+  std::vector<std::vector<Su3Matrix*> >::iterator site_iter;
+  std::vector<Su3Matrix*>::iterator direction_iter;
+
+  for (site_iter=lattice_.begin(); site_iter != lattice_.end(); ++site_iter) {
+    for (direction_iter=site_iter->begin(); direction_iter != site_iter->end(); ++direction_iter) {
+        delete *direction_iter;
+    }
+  }
+}

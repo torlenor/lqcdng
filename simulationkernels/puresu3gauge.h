@@ -34,10 +34,13 @@
 class PureSU3GaugeSim : public GenericSimClass {
   public:
     PureSU3GaugeSim(GlobalSettings &settings) : GenericSimClass(settings){
-      std::cout << "Pure SU(3) Simulation class version 0.1" << std::endl;
+      std::cout << "Pure SU(3) Simulation class version 0.0" << std::endl;
     };
 
   private:
+    void PrepareStorage();
+    void DeleteStorage();
+  
     void Update(const int nskip);
 
     void StapleSum(Su3Matrix &S, int mu,int x);
@@ -48,6 +51,8 @@ class PureSU3GaugeSim : public GenericSimClass {
     std::complex<double> MeasPoll();
 
     void Mixed();
+    
+    std::vector<std::vector<Su3Matrix*> > lattice_;
 };
 
 #endif // PURESU3GAUGESIM_H

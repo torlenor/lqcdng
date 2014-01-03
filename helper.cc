@@ -24,16 +24,6 @@
 #include <iostream>
 
 #include "globalsettings.h"
-#include "su3.h"
-
-void PrintMatrix(Su3Matrix &in){
-  for (unsigned int i=0;i<3;i++) {
-    for (unsigned int j=0;j<3;j++) {
-      std::cout << in.get(i,j) << " ";
-    }   
-    std::cout << std::endl;
-  }
-}
 
 void PrintSettings(GlobalSettings &settings) {
   std::cout << "Settings:" << std::endl

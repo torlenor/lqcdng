@@ -26,7 +26,6 @@
 
 #include "globalsettings.h"
 #include "storage.hpp"
-#include "su3.h"
 
 class GenericSimClass {
   public:
@@ -37,8 +36,9 @@ class GenericSimClass {
 
   protected:
     void PrepareNeib();
-    void PrepareStorage();
-    void DeleteStorage();
+    
+    virtual void PrepareStorage(){};
+    virtual void DeleteStorage(){};
 
     double Uni();
 
@@ -47,7 +47,6 @@ class GenericSimClass {
     virtual void Measurement();
 
     GlobalSettings settings_;
-    std::vector<std::vector<Su3Matrix*> > lattice_;
     std::vector<std::vector<int> > neib_;
 };
 

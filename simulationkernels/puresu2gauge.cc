@@ -29,9 +29,9 @@
 #include "helper.h"
 #include "su2.h"
 
-void PureSU2GaugeSim::StapleSum(Su3Matrix &S, int mu,int x) {
+void PureSU2GaugeSim::StapleSum(Su2Matrix &S, int mu,int x) {
   int xpmu,xpnu,xmnupmu,xmnu;
-  Su3Matrix U12, U123;
+  Su2Matrix U12, U123;
 
   xpmu = neib_[x][mu];
 
@@ -61,9 +61,9 @@ void PureSU2GaugeSim::StapleSum(Su3Matrix &S, int mu,int x) {
   }
 }
 
-void PureSU2GaugeSim::MetroOffer(Su3Matrix &Unew, Su3Matrix &Uold) {
+void PureSU2GaugeSim::MetroOffer(Su2Matrix &Unew, Su2Matrix &Uold) {
   // Generates a trial matrix for the metropolis update
-  Su3Matrix change;
+  Su2Matrix change;
   double phi, rho, rx, ry; 
   const double bias = 3.3;
   
@@ -87,9 +87,9 @@ void PureSU2GaugeSim::MetroOffer(Su3Matrix &Unew, Su3Matrix &Uold) {
   }    
 }
 
-void PureSU2GaugeSim::OverOffer(Su3Matrix &Unew, Su3Matrix &Uold, Su3Matrix &stot) {
+void PureSU2GaugeSim::OverOffer(Su2Matrix &Unew, Su2Matrix &Uold, Su2Matrix &stot) {
   // Generates a overrelaxation trial matrix
-  Su3Matrix gtem, g0;
+  Su2Matrix gtem, g0;
 
   g0 = stot;
 
@@ -100,8 +100,8 @@ void PureSU2GaugeSim::OverOffer(Su3Matrix &Unew, Su3Matrix &Uold, Su3Matrix &sto
 }
 
 void PureSU2GaugeSim::Mixed() {
-  Su3Matrix uold, ustap0;
-  Su3Matrix utrial, udiff, betasum;
+  Su2Matrix uold, ustap0;
+  Su2Matrix utrial, udiff, betasum;
   double b03 = -settings_.beta/(double)3.0; // MODIFIED FOR SU(N=md), md=2,3
   
   std::complex<double> trace;
@@ -149,7 +149,7 @@ std::complex<double> PureSU2GaugeSim::MeasPoll() {
   poll=std::complex<double> (0,0);
   trace=std::complex<double> (0,0);
 
-  Su3Matrix up, uu, upaux;
+  Su2Matrix up, uu, upaux;
 
   int is0=0;
   int i4=0;
@@ -196,4 +196,36 @@ void PureSU2GaugeSim::Update(const int nskip) {
 
 void PureSU2GaugeSim::Measurement() {
   std::cout << MeasPoll() << std::endl;
+}
+
+void PureSU2GaugeSim::PrepareStorage() {
+  lattice_.resize(settings_.nsites);
+  for (int i=0; i<settings_.nsites; i++) {
+    for(int d=0; d<2*settings_.dim; d++) {
+      lattice_[i].push_back(new Su2Matrix());
+    }
+  }
+ 
+  // Set all links to unit matrix 
+  std::vector<std::vector<Su2Matrix*> >::iterator site_iter;
+  std::vector<Su2Matrix*>::iterator direction_iter;
+
+  for (site_iter=lattice_.begin(); site_iter != lattice_.end(); ++site_iter) {
+    for (direction_iter=site_iter->begin(); direction_iter != site_iter->end(); ++direction_iter) {
+      for (unsigned int i=0; i<3; i++) {
+        (*direction_iter)->set(i,i,1.0);
+      }   
+    }
+  }
+}
+
+void PureSU2GaugeSim::DeleteStorage() {
+  std::vector<std::vector<Su2Matrix*> >::iterator site_iter;
+  std::vector<Su2Matrix*>::iterator direction_iter;
+
+  for (site_iter=lattice_.begin(); site_iter != lattice_.end(); ++site_iter) {
+    for (direction_iter=site_iter->begin(); direction_iter != site_iter->end(); ++direction_iter) {
+        delete *direction_iter;
+    }
+  }
 }

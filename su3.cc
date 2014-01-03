@@ -87,6 +87,15 @@ void AddMatrix(Su3Matrix &m_in1, Su3Matrix &m_in2, Su3Matrix &m_out) {
 	}
 }
 
+void Su3Matrix::print(Su3Matrix &in){
+  for (unsigned int i=0;i<3;i++) {
+    for (unsigned int j=0;j<3;j++) {
+      std::cout << in.get(i,j) << " ";
+    }   
+    std::cout << std::endl;
+  }
+}
+
 void SubstractMatrix(Su3Matrix &m_in1, Su3Matrix &m_in2, Su3Matrix &m_out) {
 	for (int x=0; x<3; ++x) {
 		for (int y=0; y<3; ++y) {

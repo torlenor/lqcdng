@@ -23,30 +23,30 @@
 
 #include <iostream>
 
-Su3Matrix::Su3Matrix() {
+Su2Matrix::Su2Matrix() {
   matrix_.resize(kMatrixDim);
   for (int d=0; d<kMatrixDim; d++) {
     matrix_[d].resize(kMatrixDim);
   }
 }
 
-Su3Matrix::~Su3Matrix() {
+Su2Matrix::~Su2Matrix() {
 
 }
 
-void Su3Matrix::set(const int x, const int y, const std::complex<double> in) {
+void Su2Matrix::set(const int x, const int y, const std::complex<double> in) {
   matrix_[x][y] = in;
 }
 
-std::complex<double> Su3Matrix::get(const int x, const int y) {
+std::complex<double> Su2Matrix::get(const int x, const int y) {
   return matrix_[x][y];
 }
 
-std::complex<double>& Su3Matrix::at(const int x, const int y) {
+std::complex<double>& Su2Matrix::at(const int x, const int y) {
   return matrix_[x][y];
 }
 
-void Su3Matrix::Norm() {
+void Su2Matrix::Norm() {
   // Normalizes the first row of matrix matrix_ for SU(3)
   double normu, normv;
   std::complex<double> v[3];
@@ -79,7 +79,16 @@ void Su3Matrix::Norm() {
   matrix_[2][2] = conj(matrix_[0][0])*conj(matrix_[1][1])-conj(matrix_[0][1])*conj(matrix_[1][0]);
 }
 
-void AddMatrix(Su3Matrix &m_in1, Su3Matrix &m_in2, Su3Matrix &m_out) {
+void Su2Matrix::print(Su2Matrix &in){
+  for (unsigned int i=0;i<3;i++) {
+    for (unsigned int j=0;j<3;j++) {
+      std::cout << in.get(i,j) << " ";
+    }   
+    std::cout << std::endl;
+  }
+}
+
+void AddMatrix(Su2Matrix &m_in1, Su2Matrix &m_in2, Su2Matrix &m_out) {
 	for (int x=0; x<3; x++) {
 		for (int y=0; y<3; y++) {
 			m_out.set(x, y, m_in1.get(x, y) + m_in2.get(x, y));
@@ -87,7 +96,7 @@ void AddMatrix(Su3Matrix &m_in1, Su3Matrix &m_in2, Su3Matrix &m_out) {
 	}
 }
 
-void SubstractMatrix(Su3Matrix &m_in1, Su3Matrix &m_in2, Su3Matrix &m_out) {
+void SubstractMatrix(Su2Matrix &m_in1, Su2Matrix &m_in2, Su2Matrix &m_out) {
 	for (int x=0; x<3; ++x) {
 		for (int y=0; y<3; ++y) {
 			m_out.at(x, y) = m_in1.get(x, y) - m_in2.get(x, y);
@@ -95,7 +104,7 @@ void SubstractMatrix(Su3Matrix &m_in1, Su3Matrix &m_in2, Su3Matrix &m_out) {
 	}
 }
 
-void MultMatrixabc(Su3Matrix &m_in1, Su3Matrix &m_in2, Su3Matrix &m_out) {
+void MultMatrixabc(Su2Matrix &m_in1, Su2Matrix &m_in2, Su2Matrix &m_out) {
 	for (int x=0; x<3; ++x) {
 		for (int y=0; y<3; ++y) {
       m_out.at(x,y)=m_in1.at(x,0)*m_in2.at(0,y);
@@ -106,7 +115,7 @@ void MultMatrixabc(Su3Matrix &m_in1, Su3Matrix &m_in2, Su3Matrix &m_out) {
 	}
 }
 
-void MultMatrixadagbc(Su3Matrix &m_in1, Su3Matrix &m_in2, Su3Matrix &m_out) {
+void MultMatrixadagbc(Su2Matrix &m_in1, Su2Matrix &m_in2, Su2Matrix &m_out) {
 	for (int x=0; x<3; ++x) {
 		for (int y=0; y<3; ++y) {
       m_out.at(x,y) = conj(m_in1.at(0,x))*m_in2.at(0,y);
@@ -117,7 +126,7 @@ void MultMatrixadagbc(Su3Matrix &m_in1, Su3Matrix &m_in2, Su3Matrix &m_out) {
 	}
 }
 
-void MultMatrixabdagc(Su3Matrix &m_in1, Su3Matrix &m_in2, Su3Matrix &m_out) {
+void MultMatrixabdagc(Su2Matrix &m_in1, Su2Matrix &m_in2, Su2Matrix &m_out) {
 	for (int x=0; x<3; ++x) {
 		for (int y=0; y<3; ++y) {
       m_out.at(x,y) = m_in1.at(x,0)*conj(m_in2.at(y,0)) + m_in1.at(x,1)*conj(m_in2.at(y,1))  + m_in1.at(x,2)*conj(m_in2.at(y,2));
@@ -125,7 +134,7 @@ void MultMatrixabdagc(Su3Matrix &m_in1, Su3Matrix &m_in2, Su3Matrix &m_out) {
 	}
 }
 
-void MultMatrixadagbdagc(Su3Matrix &m_in1, Su3Matrix &m_in2, Su3Matrix &m_out) {
+void MultMatrixadagbdagc(Su2Matrix &m_in1, Su2Matrix &m_in2, Su2Matrix &m_out) {
 	for (int x=0; x<3; ++x) {
 		for (int y=0; y<3; ++y) {
       m_out.at(x,y) = conj(m_in1.at(0,x))*conj(m_in2.at(y,0));
@@ -136,7 +145,7 @@ void MultMatrixadagbdagc(Su3Matrix &m_in1, Su3Matrix &m_in2, Su3Matrix &m_out) {
 	}
 }
 
-std::complex<double> MultTraceMatrix(Su3Matrix &m_in1, Su3Matrix &m_in2) {
+std::complex<double> MultTraceMatrix(Su2Matrix &m_in1, Su2Matrix &m_in2) {
   std::complex<double> tr=0;
   for (int k=0; k<3; k++) {
 		for (int i=0; i<3; i++) {

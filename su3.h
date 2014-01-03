@@ -36,6 +36,8 @@ class Su3Matrix {
 
     void Norm(); // Normalizes the SU3 matrix
 
+    void print(Su3Matrix &in); // Prints the matrix to STDOUT
+
   private:
     static const int kMatrixDim = 3;
     std::vector<std::vector<std::complex<double> > > matrix_;
