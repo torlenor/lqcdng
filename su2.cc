@@ -19,7 +19,7 @@
  *
  */
 
-#include "su3.h"
+#include "su2.h"
 
 #include <iostream>
 

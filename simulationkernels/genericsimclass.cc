@@ -30,6 +30,7 @@
 
 GenericSimClass::GenericSimClass(GlobalSettings &settings) {
   settings_ = settings;
+  std::cout << "Generic MC Simulation class version 0.1" << std::endl;
 }
 
 GenericSimClass::~GenericSimClass() {

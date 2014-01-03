@@ -1,6 +1,5 @@
 /*
- * puresu3gaugesim.h - class for pure SU(3) gauge sim inherited from
- * GenericSimClass - header
+ * lqcdnq.cc - Lattice QCD Monte Carlo main functions
  *
  * Copyright © 2013 H.-P. Schadler  <hanspeter.schadler@uni-graz.at>
  *
@@ -20,34 +19,32 @@
  *
  */
 
-#ifndef PURESU3GAUGESIM_H
-#define PURESU3GAUGESIM_H
-
+#include <cstdlib>
+#include <ctime>
+#include <iostream>
 #include <vector>
 
-#include "genericsimclass.h"
-
 #include "globalsettings.h"
+#include "helper.h"
+#include "init.h"
+#include "simulationkernels/puresu2gauge.h"
 #include "storage.hpp"
-#include "su3.h"
+#include "su2.h"
 
-class PureSU3GaugeSim : public GenericSimClass {
-  public:
-    PureSU3GaugeSim(GlobalSettings &settings) : GenericSimClass(settings){
-      std::cout << "Pure SU(3) Simulation class version 0.1" << std::endl;
-    };
+int main(int argc, char **argv) {
+  // Print help and read settings from command line
+  GlobalSettings settings;
+  Init(argc, argv, settings);
+  PrintSettings(settings);
+  std::cout << std::endl;
 
-  private:
-    void Update(const int nskip);
+  // Initialize random number generator
+  // TODO: Change this to something else!
+  srand (time(NULL));
 
-    void StapleSum(Su3Matrix &S, int mu,int x);
-    void OverOffer(Su3Matrix &Unew, Su3Matrix &Uold, Su3Matrix &stot);
-    void MetroOffer(Su3Matrix &Unew, Su3Matrix &Uold);
+  // Create a simulation instance
+  PureSU2GaugeSim *sim1 = new PureSU2GaugeSim(settings);
+  sim1->StartSimulation();
 
-    void Measurement();
-    std::complex<double> MeasPoll();
-
-    void Mixed();
-};
-
-#endif // PURESU3GAUGESIM_H
+  return 0;  
+}

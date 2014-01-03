@@ -20,8 +20,8 @@
  *
  */
 
-#ifndef PURESU3GAUGESIM_H
-#define PURESU3GAUGESIM_H
+#ifndef PURESU2GAUGESIM_H
+#define PURESU2GAUGESIM_H
 
 #include <vector>
 
@@ -29,13 +29,13 @@
 
 #include "globalsettings.h"
 #include "storage.hpp"
-#include "su3.h"
+#include "su2.h"
 
-class PureSU3GaugeSim : public GenericSimClass {
+class PureSU2GaugeSim : public GenericSimClass {
   public:
-    PureSU3GaugeSim(GlobalSettings &settings) : GenericSimClass(settings){
+    PureSU2GaugeSim(GlobalSettings &settings) : GenericSimClass(settings){
       std::cout << "Pure SU(3) Simulation class version 0.1" << std::endl;
-    };
+    }
 
   private:
     void Update(const int nskip);
@@ -50,4 +50,4 @@ class PureSU3GaugeSim : public GenericSimClass {
     void Mixed();
 };
 
-#endif // PURESU3GAUGESIM_H
+#endif // PURESU2GAUGESIM_H
