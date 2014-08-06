@@ -23,10 +23,11 @@
 #include "puresu3gauge.h"
 
 #include <cstdlib>
+#include <ctime>
 #include <iostream>
+#include <sstream>
 
 #include "globalsettings.h"
-#include "helper.h"
 #include "su3.h"
 
 void PureSU3GaugeSim::StapleSum(Su3Matrix &S, int mu,int x) {
@@ -228,4 +229,42 @@ void PureSU3GaugeSim::DeleteStorage() {
         delete *direction_iter;
     }
   }
+}
+
+void PureSU3GaugeSim::InitIndividual() {
+  std::stringstream randletters;
+  if (settings_.writeconf == true || settings_.meas == true) {
+    // We are generating 3 random letters to mark the stream
+    srand(time(NULL));
+    char a;
+    for (int i=0; i<3; i++) {
+      a = char('a' + (rand() % 26));
+      randletters << a;
+    }
+  }
+
+  if (settings_.writeconf == true) {
+    // Generate filename for measurements writeout
+    std::stringstream filename;
+    filename << "conf_" << settings_.ns << "x" << settings_.nt << "_b" << settings_.beta << "_";
+    filename << randletters.str();
+    filename << ".data";
+    filemeasname_ = filename.str();
+
+    std::cout << filemeasname_ << std::endl;
+  }
+  
+  if (settings_.meas == true) {
+    // Generate filename for measurements writeout
+    std::stringstream filename;
+    filename << "meas_" << settings_.ns << "x" << settings_.nt << "_b" << settings_.beta << "_";
+    filename << randletters.str();
+    filename << "_";
+    fileconfnamebase_ = filename.str();
+
+    std::cout << fileconfnamebase_ << std::endl;
+  }
+}
+void PureSU3GaugeSim::WriteConfig() {
+
 }

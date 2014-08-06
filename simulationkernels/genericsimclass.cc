@@ -25,8 +25,7 @@
 #include <iostream>
 
 #include "globalsettings.h"
-#include "helper.h"
-// #include "su3.h"
+#include "measuretime.h"
 
 GenericSimClass::GenericSimClass(GlobalSettings &settings) {
   settings_ = settings;
@@ -120,21 +119,29 @@ void GenericSimClass::Update(const int nskip) {
 int GenericSimClass::StartSimulation() {
   PrepareNeib();
   PrepareStorage();
+  InitIndividual();
+
+  double tstart, tend;
 
   // Equilibration
+  tstart = gettime();
   std::cout << "Equilibration... " << std::endl;
   Update(settings_.nequi);
-  std::cout << "Equilibration sweeps finished. Starting measurements..." << std::endl << std::endl;
+  tend = gettime();
+  std::cout << "Equilibration sweeps finished in " << tend - tstart <<  " s. Starting measurements..." << std::endl << std::endl;
 
   for (int n=0; n<settings_.nmeas; n++) {
+    tstart = gettime();
     std::cout << "Measurement " << n+1 << std::endl;
     Update(settings_.nskip);
     if (settings_.meas == true) {
       Measurement();
     }
     if (settings_.writeconf == true) {
-      std::cout << "Writing config..." << std::endl;
+      WriteConfig();
     }
+    tend = gettime();
+    std::cout << " done in " << tend - tstart  << " s." << std::endl;
   }
 
   DeleteStorage();
@@ -142,8 +149,20 @@ int GenericSimClass::StartSimulation() {
   return 0;
 }
 
-void GenericSimClass::Measurement(){
+void GenericSimClass::InitIndividual() {
   // Has to be implemented in inherited class
-  std::cout << "WARN: NOT IMPLEMENTED" << std::endl;
+  std::cout << "WARN: GenericSimClass::InitIndividual() NOT IMPLEMENTED" << std::endl;
+  // Do something here
+}
+
+void GenericSimClass::Measurement() {
+  // Has to be implemented in inherited class
+  std::cout << "WARN: Measurement() NOT IMPLEMENTED" << std::endl;
+  // Do something here
+}
+
+void GenericSimClass::WriteConfig() {
+  // Has to be implemented in inherited class
+  std::cout << "WARN: WriteConfig() NOT IMPLEMENTED" << std::endl;
   // Do something here
 }

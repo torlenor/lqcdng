@@ -26,7 +26,6 @@
 #include <iostream>
 
 #include "globalsettings.h"
-#include "helper.h"
 #include "su2.h"
 
 void PureSU2GaugeSim::StapleSum(Su2Matrix &S, int mu,int x) {

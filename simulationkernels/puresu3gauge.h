@@ -23,6 +23,7 @@
 #ifndef PURESU3GAUGESIM_H
 #define PURESU3GAUGESIM_H
 
+#include <fstream>
 #include <vector>
 
 #include "genericsimclass.h"
@@ -40,6 +41,8 @@ class PureSU3GaugeSim : public GenericSimClass {
   private:
     void PrepareStorage();
     void DeleteStorage();
+
+    void InitIndividual();
   
     void Update(const int nskip);
 
@@ -50,9 +53,16 @@ class PureSU3GaugeSim : public GenericSimClass {
     void Measurement();
     std::complex<double> MeasPoll();
 
+    void WriteConfig();
+
     void Mixed();
     
     std::vector<std::vector<Su3Matrix*> > lattice_;
+
+    // Filehandler for measurement
+    std::string filemeasname_;
+    std::string fileconfnamebase_;
+    std::ofstream filemeas_;
 };
 
 #endif // PURESU3GAUGESIM_H
