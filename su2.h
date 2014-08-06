@@ -30,9 +30,15 @@ class Su2Matrix {
 		Su2Matrix();
 		~Su2Matrix();
 
-    std::complex<double> get(const int x, const int y);
-    std::complex<double>& at(const int x, const int y);
-    void set(const int x, const int y, const std::complex<double> in);
+    inline void set(const int x, const int y, const std::complex<double> in) {
+      matrix_[x][y] = in; 
+    }
+    inline std::complex<double> get(const int x, const int y) {
+      return matrix_[x][y];
+    }
+    inline std::complex<double>& at(const int x, const int y) {
+      return matrix_[x][y];
+    }
 
     void Norm(); // Normalizes the SU2 matrix
     

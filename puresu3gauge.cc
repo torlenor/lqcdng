@@ -26,9 +26,12 @@
 
 #include "globalsettings.h"
 #include "init.h"
+#include "measuretime.h"
 #include "simulationkernels/puresu3gauge.h"
 
 int main(int argc, char **argv) {
+  double tstart, tend;
+  tstart = gettime();
   // Print help and read settings from command line
   GlobalSettings settings;
   Init(argc, argv, settings);
@@ -42,6 +45,11 @@ int main(int argc, char **argv) {
   // Create a simulation instance
   PureSU3GaugeSim *sim1 = new PureSU3GaugeSim(settings);
   sim1->StartSimulation();
+
+  tend = gettime();
+  
+  std::cout << std::endl << "Total run time: " << (tend - tstart)/(double)60 << " minutes." << std::endl;
+  std::cout << std::endl << "Have a nice day!" << std::endl;
 
   return 0;  
 }

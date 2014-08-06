@@ -30,9 +30,15 @@ class Su3Matrix {
 		Su3Matrix();
 		~Su3Matrix();
 
-    std::complex<double> get(const int x, const int y);
-    std::complex<double>& at(const int x, const int y);
-    void set(const int x, const int y, const std::complex<double> in);
+    inline void set(const int x, const int y, const std::complex<double> in) {
+      matrix_[x][y] = in; 
+    }
+    inline std::complex<double> get(const int x, const int y) {
+      return matrix_[x][y];
+    }
+    inline std::complex<double>& at(const int x, const int y) {
+      return matrix_[x][y];
+    }
 
     void Norm(); // Normalizes the SU3 matrix
 
@@ -40,6 +46,7 @@ class Su3Matrix {
 
   private:
     static const int kMatrixDim = 3;
+    // std::vector<std::complex<double> > matrix_;
     std::vector<std::vector<std::complex<double> > > matrix_;
 };
 

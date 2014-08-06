@@ -34,18 +34,6 @@ Su2Matrix::~Su2Matrix() {
 
 }
 
-void Su2Matrix::set(const int x, const int y, const std::complex<double> in) {
-  matrix_[x][y] = in;
-}
-
-std::complex<double> Su2Matrix::get(const int x, const int y) {
-  return matrix_[x][y];
-}
-
-std::complex<double>& Su2Matrix::at(const int x, const int y) {
-  return matrix_[x][y];
-}
-
 void Su2Matrix::Norm() {
   // Normalizes the first row of matrix matrix_ for SU(3)
   double normu, normv;

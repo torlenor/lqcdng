@@ -23,6 +23,7 @@
 #ifndef PURESU2GAUGESIM_H
 #define PURESU2GAUGESIM_H
 
+#include <iostream>
 #include <vector>
 
 #include "genericsimclass.h"

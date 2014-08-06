@@ -23,6 +23,7 @@
 #ifndef PURESU3GAUGESIM_H
 #define PURESU3GAUGESIM_H
 
+#include <iostream>
 #include <fstream>
 #include <vector>
 
