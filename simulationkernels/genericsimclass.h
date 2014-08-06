@@ -41,13 +41,15 @@ class GenericSimClass {
     virtual void DeleteStorage(){};
 
     virtual void InitIndividual();
+    virtual void CleanupIndividual();
 
     double Uni();
 
     virtual void Update(const int nskip);
     
     virtual void Measurement();
-    virtual void WriteConfig();
+    virtual void WriteMeas(const int &m);
+    virtual int WriteConfig(const int &m);
 
     GlobalSettings settings_;
     std::vector<std::vector<int> > neib_;

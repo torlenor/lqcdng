@@ -75,7 +75,8 @@ int Init(int &argc, char *argv[], GlobalSettings &settings) {
   settings.nmeas=10;
   settings.nskip=1;
   settings.beta=5.6;
-  settings.nhit=1;
+  settings.nhit=5;
+  settings.nover=3;
   settings.meas=false;
   settings.writeconf=false;
 

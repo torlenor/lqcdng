@@ -25,6 +25,7 @@
 #include <cstdlib>
 #include <ctime>
 #include <iostream>
+#include <limits>
 #include <sstream>
 
 #include "globalsettings.h"
@@ -139,12 +140,43 @@ void PureSU3GaugeSim::Mixed() {
           *lattice_[n][mu] = utrial;
         }   
       }
-
     }   
   }
 }
 
-std::complex<double> PureSU3GaugeSim::MeasPoll() {
+void PureSU3GaugeSim::Over() {
+  Su3Matrix uold, ustap0;
+  Su3Matrix utrial, udiff, betasum;
+  double b03 = -settings_.beta/(double)3.0; // MODIFIED FOR SU(N=md), md=2,3
+  
+  std::complex<double> trace;
+
+  for (int i=0; i<settings_.nover; i++) {
+    for (int n=0; n<settings_.nsites; n++) {
+      for (int mu=0; mu<settings_.dim; mu++) {
+        uold = *lattice_[n][mu];
+
+        StapleSum(ustap0, mu, n);
+        
+        for (int i=0; i<3; i++) {
+          for (int j=0; j<3; j++) {
+            betasum.set(i, j, ustap0.get(i, j)*b03);
+          }
+        }
+
+        OverOffer(utrial, uold, betasum);
+        SubstractMatrix(uold, utrial, udiff);
+        trace = MultTraceMatrix(udiff,betasum);
+
+        if (Uni() < exp(std::real(trace))) {
+          *lattice_[n][mu] = utrial;
+        }   
+      }
+    }   
+  }
+}
+
+std::complex<double> PureSU3GaugeSim::CalcPoll() {
   // Calculates the Polyakov loop spatial average
   std::complex<double> poll, trace;
   poll=std::complex<double> (0,0);
@@ -186,17 +218,24 @@ std::complex<double> PureSU3GaugeSim::MeasPoll() {
   return poll;
 }
 
+std::complex<double> PureSU3GaugeSim::CalcPlaq() {
+  return std::complex<double>(0,0);
+}
+
 void PureSU3GaugeSim::Update(const int nskip) {
   for (int skip=0; skip<nskip; skip++) {  
     // TODO: Update procedures
     std::cout << "\r Sweep " << skip+1 << " of " << nskip << std::flush;
     Mixed();
+    if (settings_.beta>0.0001) {
+      Over();
+    }
   }
   std::cout << std::endl;
 }
 
 void PureSU3GaugeSim::Measurement() {
-  std::cout << MeasPoll() << std::endl;
+  //
 }
 
 void PureSU3GaugeSim::PrepareStorage() {
@@ -243,28 +282,76 @@ void PureSU3GaugeSim::InitIndividual() {
     }
   }
 
-  if (settings_.writeconf == true) {
-    // Generate filename for measurements writeout
-    std::stringstream filename;
-    filename << "conf_" << settings_.ns << "x" << settings_.nt << "_b" << settings_.beta << "_";
-    filename << randletters.str();
-    filename << ".data";
-    filemeasname_ = filename.str();
-
-    std::cout << filemeasname_ << std::endl;
-  }
-  
   if (settings_.meas == true) {
     // Generate filename for measurements writeout
     std::stringstream filename;
     filename << "meas_" << settings_.ns << "x" << settings_.nt << "_b" << settings_.beta << "_";
     filename << randletters.str();
+    filename << ".data";
+    filemeasname_ = filename.str();
+
+    filemeas_.open(filemeasname_.c_str());
+    filemeas_.flags (std::ios::scientific);
+    filemeas_.precision(std::numeric_limits<double>::digits10 + 1); 
+    filemeas_ << "# Totalplaq Re(pl) Im(pl) Re(S/Beta) Spacelikeplaq Timelikeplaq" << std::endl;
+
+    std::cout << "Observables will be written to: " << filemeasname_ << std::endl;
+  }
+  
+  if (settings_.writeconf == true) {
+    // Generate filename for config writeout
+    std::stringstream filename;
+    filename << "conf_" << settings_.ns << "x" << settings_.nt << "_b" << settings_.beta << "_";
+    filename << randletters.str();
     filename << "_";
     fileconfnamebase_ = filename.str();
 
-    std::cout << fileconfnamebase_ << std::endl;
+    std::cout << "Configurations will be written to: " << fileconfnamebase_ << "#ofconfig" << std::endl;
   }
 }
-void PureSU3GaugeSim::WriteConfig() {
 
+void PureSU3GaugeSim::CleanupIndividual() {
+  if (settings_.meas == true) {
+    filemeas_.close();
+  }
+}
+
+int PureSU3GaugeSim::WriteConfig(const int &m) {
+  int elems=0;
+  std::complex<double> plaq, poll;
+  FILE* pFile;
+
+  // int nindex=nsite*matrixdim*matrixdim*DIM;
+  int nindex=0;
+
+  std::stringstream fconfigname;
+  fconfigname << fileconfnamebase_ << m << ".bin";
+
+  pFile = fopen(fconfigname.str().c_str(), "wb");
+  if (pFile == NULL) perror ("Error opening file");
+  else{
+    elems += fwrite(&settings_.ns, sizeof(int), 1, pFile);
+    elems += fwrite(&settings_.ns, sizeof(int), 1, pFile);
+    elems += fwrite(&settings_.ns, sizeof(int), 1, pFile);
+    elems += fwrite(&settings_.nt, sizeof(int), 1, pFile);
+    
+    poll=CalcPoll();
+    // plaq=CalcPlaq();
+
+    elems += fwrite(&poll, sizeof(std::complex<double>),1, pFile);
+    elems += fwrite(&plaq, sizeof(std::complex<double>),1, pFile);
+
+    // elems += fwrite(&(*A)(0,0,0,0), sizeof(std::complex<double>), nindex, pFile);
+
+    fclose(pFile);
+  }
+  return nindex + 6 - elems;
+}
+
+void PureSU3GaugeSim::WriteMeas(const int &m) {
+  std::complex<double> poll=CalcPoll();
+  // std::complex<double> plaq=CalcPlaq();
+  std::complex<double> plaq=CalcPlaq();
+  // filemeas_ << "# Totalplaq Re(pl) Im(pl) Re(S/Beta) Spacelikeplaq Timelikeplaq" << std::endl;
+  filemeas_ << std::real(plaq) << " " << std::real(poll) << " " << std::imag(poll) << " " << 0 << " " << 0 << " " << 0 << std::endl; 
 }

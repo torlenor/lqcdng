@@ -44,6 +44,7 @@ class PureSU3GaugeSim : public GenericSimClass {
     void DeleteStorage();
 
     void InitIndividual();
+    void CleanupIndividual();
   
     void Update(const int nskip);
 
@@ -52,11 +53,14 @@ class PureSU3GaugeSim : public GenericSimClass {
     void MetroOffer(Su3Matrix &Unew, Su3Matrix &Uold);
 
     void Measurement();
-    std::complex<double> MeasPoll();
+    std::complex<double> CalcPoll();
+    std::complex<double> CalcPlaq();
 
-    void WriteConfig();
+    int WriteConfig(const int &m);
+    void WriteMeas(const int &m);
 
     void Mixed();
+    void Over();
     
     std::vector<std::vector<Su3Matrix*> > lattice_;
 

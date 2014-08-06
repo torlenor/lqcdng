@@ -132,13 +132,16 @@ int GenericSimClass::StartSimulation() {
 
   for (int n=0; n<settings_.nmeas; n++) {
     tstart = gettime();
-    std::cout << "Measurement " << n+1 << std::endl;
+    std::cout << "Measurement " << n+1 << " of " << settings_.nmeas << std::endl;
     Update(settings_.nskip);
     if (settings_.meas == true) {
       Measurement();
+      WriteMeas(n);
     }
     if (settings_.writeconf == true) {
-      WriteConfig();
+     if (WriteConfig(n) != 0) {
+       std::cout << "WARNING: Something went wrong in WriteConfig(n)!" << std::endl;
+     }
     }
     tend = gettime();
     std::cout << " done in " << tend - tstart  << " s." << std::endl;
@@ -155,14 +158,27 @@ void GenericSimClass::InitIndividual() {
   // Do something here
 }
 
+void GenericSimClass::CleanupIndividual() {
+  // Has to be implemented in inherited class
+  std::cout << "WARN: GenericSimClass::CleanupIndividual() NOT IMPLEMENTED" << std::endl;
+  // Do something here
+}
+
 void GenericSimClass::Measurement() {
   // Has to be implemented in inherited class
   std::cout << "WARN: Measurement() NOT IMPLEMENTED" << std::endl;
   // Do something here
 }
 
-void GenericSimClass::WriteConfig() {
+void GenericSimClass::WriteMeas(const int &m) {
+  // Has to be implemented in inherited class
+  std::cout << "WARN: WriteMeas() NOT IMPLEMENTED" << std::endl;
+  // Do something here
+}
+
+int GenericSimClass::WriteConfig(const int &m) {
   // Has to be implemented in inherited class
   std::cout << "WARN: WriteConfig() NOT IMPLEMENTED" << std::endl;
+  return 0;
   // Do something here
 }

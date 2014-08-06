@@ -37,6 +37,7 @@ class GlobalSettings {
     int nskip;
     int nequi;
     int nhit;
+    int nover;
     double beta;
 
     bool meas;

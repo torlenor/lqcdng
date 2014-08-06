@@ -67,14 +67,6 @@ void Su3Matrix::Norm() {
   matrix_[2][2] = conj(matrix_[0][0])*conj(matrix_[1][1])-conj(matrix_[0][1])*conj(matrix_[1][0]);
 }
 
-void AddMatrix(Su3Matrix &m_in1, Su3Matrix &m_in2, Su3Matrix &m_out) {
-	for (int x=0; x<3; x++) {
-		for (int y=0; y<3; y++) {
-			m_out.set(x, y, m_in1.get(x, y) + m_in2.get(x, y));
-		}
-	}
-}
-
 void Su3Matrix::print(Su3Matrix &in){
   for (unsigned int i=0;i<3;i++) {
     for (unsigned int j=0;j<3;j++) {
@@ -83,64 +75,3 @@ void Su3Matrix::print(Su3Matrix &in){
     std::cout << std::endl;
   }
 }
-
-void SubstractMatrix(Su3Matrix &m_in1, Su3Matrix &m_in2, Su3Matrix &m_out) {
-	for (int x=0; x<3; ++x) {
-		for (int y=0; y<3; ++y) {
-			m_out.at(x, y) = m_in1.get(x, y) - m_in2.get(x, y);
-		}
-	}
-}
-
-void MultMatrixabc(Su3Matrix &m_in1, Su3Matrix &m_in2, Su3Matrix &m_out) {
-	for (int x=0; x<3; ++x) {
-		for (int y=0; y<3; ++y) {
-      m_out.at(x,y)=m_in1.at(x,0)*m_in2.at(0,y);
-		  for (int k=1;k<3; ++k) {
-        m_out.at(x,y) += m_in1.at(x,k)*m_in2.at(k,y);
-      }
-		}
-	}
-}
-
-void MultMatrixadagbc(Su3Matrix &m_in1, Su3Matrix &m_in2, Su3Matrix &m_out) {
-	for (int x=0; x<3; ++x) {
-		for (int y=0; y<3; ++y) {
-      m_out.at(x,y) = conj(m_in1.at(0,x))*m_in2.at(0,y);
-		  for (int k=1;k<3; ++k) {
-        m_out.at(x,y) += conj(m_in1.at(k,x))*m_in2.at(k,y);
-      }
-		}
-	}
-}
-
-void MultMatrixabdagc(Su3Matrix &m_in1, Su3Matrix &m_in2, Su3Matrix &m_out) {
-	for (int x=0; x<3; ++x) {
-		for (int y=0; y<3; ++y) {
-      m_out.at(x,y) = m_in1.at(x,0)*conj(m_in2.at(y,0)) + m_in1.at(x,1)*conj(m_in2.at(y,1))  + m_in1.at(x,2)*conj(m_in2.at(y,2));
-		}
-	}
-}
-
-void MultMatrixadagbdagc(Su3Matrix &m_in1, Su3Matrix &m_in2, Su3Matrix &m_out) {
-	for (int x=0; x<3; ++x) {
-		for (int y=0; y<3; ++y) {
-      m_out.at(x,y) = conj(m_in1.at(0,x))*conj(m_in2.at(y,0));
-		  for (int k=1;k<3; ++k) {
-        m_out.at(x,y) += conj(m_in1.at(k,x))*conj(m_in2.at(y,k));
-      }
-		}
-	}
-}
-
-std::complex<double> MultTraceMatrix(Su3Matrix &m_in1, Su3Matrix &m_in2) {
-  std::complex<double> tr=0;
-  for (int k=0; k<3; k++) {
-		for (int i=0; i<3; i++) {
-      tr += m_in1.at(i,k)*m_in2.at(k,i);
-    }
-  }
-
-  return tr;
-}
-

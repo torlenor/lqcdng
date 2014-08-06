@@ -30,6 +30,8 @@ void GlobalSettings::PrintSettings() {
   << "Equilibrations = " << nequi << std::endl
   << "Measurements = " << nmeas << std::endl
   << "Skip = " << nskip << std::endl
+  << "Nhit = " << nhit << std::endl
+  << "Nover = " << nover << std::endl
   << "Beta = " << beta << std::endl;
 }
 
