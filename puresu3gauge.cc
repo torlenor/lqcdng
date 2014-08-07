@@ -40,7 +40,7 @@ int main(int argc, char **argv) {
 
   // Initialize random number generator
   // TODO: Change this to something else!
-  srand (time(NULL));
+  srand(time(NULL));
 
   // Create a simulation instance
   PureSU3GaugeSim *sim1 = new PureSU3GaugeSim(settings);

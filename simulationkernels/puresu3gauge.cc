@@ -219,7 +219,34 @@ std::complex<double> PureSU3GaugeSim::CalcPoll() {
 }
 
 std::complex<double> PureSU3GaugeSim::CalcPlaq() {
-  return std::complex<double>(0,0);
+  // Calculates the plaquette spatial average over all 6N plaquettes
+  int ispmu, ispnu;
+  std::complex<double> sumplaqs = std::complex<double>(0,0), trace;
+  Su3Matrix u1, u2, u3, u4, u23, u234;
+
+  for (int is = 0; is<settings_.nsites; is++) {
+    for (int imu = 0; imu<settings_.dim; imu++) {
+      for (int inu = imu+1; inu<settings_.dim; inu++) {
+        ispmu = neib_[is][imu];
+        ispnu = neib_[is][inu];
+
+        u1 = *lattice_[is][imu];
+        u2 = *lattice_[ispmu][inu];
+        u3 = *lattice_[ispnu][imu];
+        u4 = *lattice_[is][inu];
+
+        MultMatrixabdagc(u2, u3, u23);
+        MultMatrixabdagc(u23, u4, u234);
+        trace = MultTraceMatrix(u1,u234);
+
+        sumplaqs = sumplaqs + trace;
+      }
+    }
+  }
+
+  sumplaqs=sumplaqs/((double)6*3*(double)settings_.nsites); // factor because sum over N lattice points and md from trace
+
+  return sumplaqs;
 }
 
 void PureSU3GaugeSim::Update(const int nskip) {
@@ -336,18 +363,16 @@ int PureSU3GaugeSim::WriteConfig(const int &m) {
     elems += fwrite(&settings_.nt, sizeof(int), 1, pFile);
     
     poll=CalcPoll();
-    // plaq=CalcPlaq();
+    plaq=CalcPlaq();
 
     elems += fwrite(&poll, sizeof(std::complex<double>),1, pFile);
     elems += fwrite(&plaq, sizeof(std::complex<double>),1, pFile);
 
     for (int is=0; is<settings_.nsites; is++) {
       for (int mu=0; mu<settings_.dim; mu++) {
-        elems += fwrite(&lattice_[is][mu], sizeof(std::complex<double>), 3*3 , pFile);
+        elems += fwrite((&lattice_[is][mu]->at(0,0)), sizeof(std::complex<double>), 3*3 , pFile);
       }
     }
-
-    // elems += fwrite(&(*A)(0,0,0,0), sizeof(std::complex<double>), nindex, pFile);
 
     fclose(pFile);
   }
@@ -356,8 +381,6 @@ int PureSU3GaugeSim::WriteConfig(const int &m) {
 
 void PureSU3GaugeSim::WriteMeas(const int &m) {
   std::complex<double> poll=CalcPoll();
-  // std::complex<double> plaq=CalcPlaq();
   std::complex<double> plaq=CalcPlaq();
-  // filemeas_ << "# Totalplaq Re(pl) Im(pl) Re(S/Beta) Spacelikeplaq Timelikeplaq" << std::endl;
   filemeas_ << std::real(plaq) << " " << std::real(poll) << " " << std::imag(poll) << " " << 0 << " " << 0 << " " << 0 << std::endl; 
 }
