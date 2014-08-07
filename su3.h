@@ -30,25 +30,25 @@ class Su3Matrix {
 		Su3Matrix();
 		~Su3Matrix();
 
-    inline void set(const int x, const int y, const std::complex<double> in) {
+    inline void set(const int i, const int j, const std::complex<double> in) {
       #ifdef DEBUG
-        matrix_.at(x).at(y) = in; 
+        matrix_.at(i*3+j) = in; 
       #else
-        matrix_[x][y] = in; 
+        matrix_[i*3+j] = in; 
       #endif
     }
-    inline std::complex<double> get(const int x, const int y) {
+    inline std::complex<double> get(const int i, const int j) {
       #ifdef DEBUG
-        return matrix_.at(x).at(y);
+        return matrix_.at(i*3+j);
       #else
-        return matrix_[x][y];
+        return matrix_[i*3+j];
       #endif
     }
-    inline std::complex<double>& at(const int x, const int y) {
+    inline std::complex<double>& at(const int i, const int j) {
       #ifdef DEBUG
-        return matrix_.at(x).at(y);
+        return matrix_.at(i*3+j);
       #else
-        return matrix_[x][y];
+        return matrix_[i*3+j];
       #endif
     }
     
@@ -60,7 +60,7 @@ class Su3Matrix {
   private:
     static const int kMatrixDim = 3;
     // std::vector<std::complex<double> > matrix_;
-    std::vector<std::vector<std::complex<double> > > matrix_;
+    std::vector<std::complex<double> > matrix_;
 };
 
 inline void AddMatrix(Su3Matrix &m_in1, Su3Matrix &m_in2, Su3Matrix &m_out) {

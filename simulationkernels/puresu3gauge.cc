@@ -322,7 +322,7 @@ int PureSU3GaugeSim::WriteConfig(const int &m) {
   FILE* pFile;
 
   // int nindex=nsite*matrixdim*matrixdim*DIM;
-  int nindex=0;
+  int nindex=settings_.nsites*3*3*4;
 
   std::stringstream fconfigname;
   fconfigname << fileconfnamebase_ << m << ".bin";
@@ -340,6 +340,12 @@ int PureSU3GaugeSim::WriteConfig(const int &m) {
 
     elems += fwrite(&poll, sizeof(std::complex<double>),1, pFile);
     elems += fwrite(&plaq, sizeof(std::complex<double>),1, pFile);
+
+    for (int is=0; is<settings_.nsites; is++) {
+      for (int mu=0; mu<settings_.dim; mu++) {
+        elems += fwrite(&lattice_[is][mu], sizeof(std::complex<double>), 3*3 , pFile);
+      }
+    }
 
     // elems += fwrite(&(*A)(0,0,0,0), sizeof(std::complex<double>), nindex, pFile);
 

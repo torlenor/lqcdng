@@ -24,10 +24,7 @@
 #include <iostream>
 
 Su3Matrix::Su3Matrix() {
-  matrix_.resize(kMatrixDim);
-  for (int d=0; d<kMatrixDim; d++) {
-    matrix_[d].resize(kMatrixDim);
-  }
+  matrix_.resize(kMatrixDim*kMatrixDim);
 }
 
 Su3Matrix::~Su3Matrix() {
@@ -41,30 +38,30 @@ void Su3Matrix::Norm() {
   std::complex<double> vdotu;
 
   // Normalize the first row 
-  normu = sqrt(real(matrix_[0][0]*conj(matrix_[0][0]) + matrix_[0][1]*conj(matrix_[0][1]) + matrix_[0][2]*conj(matrix_[0][2])));
+  normu = sqrt(real(at(0,0)*conj(at(0,0)) + at(0,1)*conj(at(0,1)) + at(0,2)*conj(at(0,2))));
   
-  matrix_[0][0] = matrix_[0][0]/normu;
-  matrix_[0][1] = matrix_[0][1]/normu;
-  matrix_[0][2] = matrix_[0][2]/normu;
+  at(0,0) = at(0,0)/normu;
+  at(0,1) = at(0,1)/normu;
+  at(0,2) = at(0,2)/normu;
 
   // Build a vector v orthonormal to row 1 (Gramm-Schmidt method) and use
   // it as row 2
-  vdotu = matrix_[1][0]*conj(matrix_[0][0])+matrix_[1][1]*conj(matrix_[0][1])+matrix_[1][2]*conj(matrix_[0][2]);
+  vdotu = at(1,0)*conj(at(0,0))+at(1,1)*conj(at(0,1))+at(1,2)*conj(at(0,2));
 
-  v[0] = matrix_[1][0]-matrix_[0][0]*vdotu;
-  v[1] = matrix_[1][1]-matrix_[0][1]*vdotu;
-  v[2] = matrix_[1][2]-matrix_[0][2]*vdotu;
+  v[0] = at(1,0)-at(0,0)*vdotu;
+  v[1] = at(1,1)-at(0,1)*vdotu;
+  v[2] = at(1,2)-at(0,2)*vdotu;
 
   normv = sqrt(real(v[0]*conj(v[0]) + v[1]*conj(v[1]) + v[2]*conj(v[2])));
 
-  matrix_[1][0] = v[0]/normv;
-  matrix_[1][1] = v[1]/normv;
-  matrix_[1][2] = v[2]/normv;
+  at(1,0) = v[0]/normv;
+  at(1,1) = v[1]/normv;
+  at(1,2) = v[2]/normv;
 
   // The third row is cross product of row1* x row2* 
-  matrix_[2][0] = conj(matrix_[0][1])*conj(matrix_[1][2])-conj(matrix_[0][2])*conj(matrix_[1][1]);
-  matrix_[2][1] = conj(matrix_[0][2])*conj(matrix_[1][0])-conj(matrix_[0][0])*conj(matrix_[1][2]);
-  matrix_[2][2] = conj(matrix_[0][0])*conj(matrix_[1][1])-conj(matrix_[0][1])*conj(matrix_[1][0]);
+  at(2,0) = conj(at(0,1))*conj(at(1,2))-conj(at(0,2))*conj(at(1,1));
+  at(2,1) = conj(at(0,2))*conj(at(1,0))-conj(at(0,0))*conj(at(1,2));
+  at(2,2) = conj(at(0,0))*conj(at(1,1))-conj(at(0,1))*conj(at(1,0));
 }
 
 void Su3Matrix::print(Su3Matrix &in){
