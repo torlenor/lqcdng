@@ -59,7 +59,6 @@ class Su3Matrix {
 
   private:
     static const int kMatrixDim = 3;
-    // std::vector<std::complex<double> > matrix_;
     std::vector<std::complex<double> > matrix_;
 };
 

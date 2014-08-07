@@ -222,7 +222,7 @@ std::complex<double> PureSU3GaugeSim::CalcPlaq() {
   // Calculates the plaquette spatial average over all 6N plaquettes
   int ispmu, ispnu;
   std::complex<double> sumplaqs = std::complex<double>(0,0), trace;
-  Su3Matrix u1, u2, u3, u4, u23, u234;
+  Su3Matrix *u1, *u2, *u3, *u4, u23, u234;
 
   for (int is = 0; is<settings_.nsites; is++) {
     for (int imu = 0; imu<settings_.dim; imu++) {
@@ -230,14 +230,14 @@ std::complex<double> PureSU3GaugeSim::CalcPlaq() {
         ispmu = neib_[is][imu];
         ispnu = neib_[is][inu];
 
-        u1 = *lattice_[is][imu];
-        u2 = *lattice_[ispmu][inu];
-        u3 = *lattice_[ispnu][imu];
-        u4 = *lattice_[is][inu];
+        u1 = lattice_[is][imu];
+        u2 = lattice_[ispmu][inu];
+        u3 = lattice_[ispnu][imu];
+        u4 = lattice_[is][inu];
 
-        MultMatrixabdagc(u2, u3, u23);
-        MultMatrixabdagc(u23, u4, u234);
-        trace = MultTraceMatrix(u1,u234);
+        MultMatrixabdagc(*u2, *u3, u23);
+        MultMatrixabdagc(u23, *u4, u234);
+        trace = MultTraceMatrix(*u1,u234);
 
         sumplaqs = sumplaqs + trace;
       }
