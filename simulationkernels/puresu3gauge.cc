@@ -116,7 +116,8 @@ void PureSU3GaugeSim::Mixed() {
 
       for (int i=0; i<3; i++) {
         for (int j=0; j<3; j++) {
-          betasum.set(i, j, ustap0.get(i, j)*b03);
+          // betasum.set(i, j, ustap0.get(i, j)*b03);
+          betasum.at(i, j) = ustap0.at(i, j)*b03;
         }
       }
 
