@@ -63,6 +63,10 @@ class Su3Matrix {
 };
 
 inline void AddMatrix(Su3Matrix &m_in1, Su3Matrix &m_in2, Su3Matrix &m_out) {
+#ifdef PREFETCH
+  __builtin_prefetch (&m_in1.at(0,0), 0, 3);
+  __builtin_prefetch (&m_in2.at(0,0), 0, 3);
+#endif
 	for (int x=0; x<3; x++) {
 		for (int y=0; y<3; y++) {
 			m_out.set(x, y, m_in1.get(x, y) + m_in2.get(x, y));
@@ -71,6 +75,10 @@ inline void AddMatrix(Su3Matrix &m_in1, Su3Matrix &m_in2, Su3Matrix &m_out) {
 }
 
 inline void SubstractMatrix(Su3Matrix &m_in1, Su3Matrix &m_in2, Su3Matrix &m_out) {
+#ifdef PREFETCH
+  __builtin_prefetch (&m_in1.at(0,0), 0, 3);
+  __builtin_prefetch (&m_in2.at(0,0), 0, 3);
+#endif
 	for (int x=0; x<3; ++x) {
 		for (int y=0; y<3; ++y) {
 			m_out.at(x, y) = m_in1.get(x, y) - m_in2.get(x, y);
@@ -79,6 +87,10 @@ inline void SubstractMatrix(Su3Matrix &m_in1, Su3Matrix &m_in2, Su3Matrix &m_out
 }
 
 inline void MultMatrixabc(Su3Matrix &m_in1, Su3Matrix &m_in2, Su3Matrix &m_out) {
+#ifdef PREFETCH
+  __builtin_prefetch (&m_in1.at(0,0), 0, 3);
+  __builtin_prefetch (&m_in2.at(0,0), 0, 3);
+#endif
 	for (int x=0; x<3; ++x) {
 		for (int y=0; y<3; ++y) {
       m_out.at(x,y)=m_in1.at(x,0)*m_in2.at(0,y);
@@ -90,6 +102,10 @@ inline void MultMatrixabc(Su3Matrix &m_in1, Su3Matrix &m_in2, Su3Matrix &m_out) 
 }
 
 inline void MultMatrixadagbc(Su3Matrix &m_in1, Su3Matrix &m_in2, Su3Matrix &m_out) {
+#ifdef PREFETCH
+  __builtin_prefetch (&m_in1.at(0,0), 0, 3);
+  __builtin_prefetch (&m_in2.at(0,0), 0, 3);
+#endif
 	for (int x=0; x<3; ++x) {
 		for (int y=0; y<3; ++y) {
       m_out.at(x,y) = conj(m_in1.at(0,x))*m_in2.at(0,y);
@@ -101,6 +117,10 @@ inline void MultMatrixadagbc(Su3Matrix &m_in1, Su3Matrix &m_in2, Su3Matrix &m_ou
 }
 
 inline void MultMatrixabdagc(Su3Matrix &m_in1, Su3Matrix &m_in2, Su3Matrix &m_out) {
+#ifdef PREFETCH
+  __builtin_prefetch (&m_in1.at(0,0), 0, 3);
+  __builtin_prefetch (&m_in2.at(0,0), 0, 3);
+#endif
 	for (int x=0; x<3; ++x) {
 		for (int y=0; y<3; ++y) {
       m_out.at(x,y) = m_in1.at(x,0)*conj(m_in2.at(y,0)) + m_in1.at(x,1)*conj(m_in2.at(y,1))  + m_in1.at(x,2)*conj(m_in2.at(y,2));
@@ -109,6 +129,10 @@ inline void MultMatrixabdagc(Su3Matrix &m_in1, Su3Matrix &m_in2, Su3Matrix &m_ou
 }
 
 inline void MultMatrixadagbdagc(Su3Matrix &m_in1, Su3Matrix &m_in2, Su3Matrix &m_out) {
+#ifdef PREFETCH
+  __builtin_prefetch (&m_in1.at(0,0), 0, 3);
+  __builtin_prefetch (&m_in2.at(0,0), 0, 3);
+#endif
 	for (int x=0; x<3; ++x) {
 		for (int y=0; y<3; ++y) {
       m_out.at(x,y) = conj(m_in1.at(0,x))*conj(m_in2.at(y,0));
@@ -120,6 +144,10 @@ inline void MultMatrixadagbdagc(Su3Matrix &m_in1, Su3Matrix &m_in2, Su3Matrix &m
 }
 
 inline std::complex<double> MultTraceMatrix(Su3Matrix &m_in1, Su3Matrix &m_in2) {
+#ifdef PREFETCH
+  __builtin_prefetch (&m_in1.at(0,0), 0, 3);
+  __builtin_prefetch (&m_in2.at(0,0), 0, 3);
+#endif
   std::complex<double> tr=0;
   for (int k=0; k<3; k++) {
 		for (int i=0; i<3; i++) {
