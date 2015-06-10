@@ -23,7 +23,10 @@
 #include "puresu2gauge.h"
 
 #include <cstdlib>
+#include <ctime>
 #include <iostream>
+#include <limits>
+#include <sstream>
 
 #include "globalsettings.h"
 #include "su2.h"
@@ -142,7 +145,7 @@ void PureSU2GaugeSim::Mixed() {
   }
 }
 
-std::complex<double> PureSU2GaugeSim::MeasPoll() {
+std::complex<double> PureSU2GaugeSim::CalcPoll() {
   // Calculates the Polyakov loop spatial average
   std::complex<double> poll, trace;
   poll=std::complex<double> (0,0);
@@ -179,14 +182,44 @@ std::complex<double> PureSU2GaugeSim::MeasPoll() {
     }
   }
 
-  poll = poll/((double)3.0*settings_.ns*settings_.ns*settings_.ns);
+  poll = poll/((double)2.0*settings_.ns*settings_.ns*settings_.ns);
 
   return poll;
 }
 
+std::complex<double> PureSU2GaugeSim::CalcPlaq() {
+  // Calculates the plaquette spatial average over all 6N plaquettes
+  int ispmu, ispnu;
+  std::complex<double> sumplaqs = std::complex<double>(0,0), trace;
+  Su2Matrix *u1, *u2, *u3, *u4, u23, u234;
+
+  for (int is = 0; is<settings_.nsites; is++) {
+    for (int imu = 0; imu<settings_.dim; imu++) {
+      for (int inu = imu+1; inu<settings_.dim; inu++) {
+        ispmu = neib_[is][imu];
+        ispnu = neib_[is][inu];
+
+        u1 = lattice_[is][imu];
+        u2 = lattice_[ispmu][inu];
+        u3 = lattice_[ispnu][imu];
+        u4 = lattice_[is][inu];
+
+        MultMatrixabdagc(*u2, *u3, u23);
+        MultMatrixabdagc(u23, *u4, u234);
+        trace = MultTraceMatrix(*u1,u234);
+
+        sumplaqs = sumplaqs + trace;
+      }
+    }
+  }
+
+  sumplaqs=sumplaqs/((double)6*2*(double)settings_.nsites); // factor because sum over N lattice points and md from trace
+
+  return sumplaqs;
+}
+
 void PureSU2GaugeSim::Update(const int nskip) {
   for (int skip=0; skip<nskip; skip++) {  
-    // TODO: Update procedures
     std::cout << "\r Sweep " << skip+1 << " of " << nskip << std::flush;
     Mixed();
   }
@@ -194,7 +227,7 @@ void PureSU2GaugeSim::Update(const int nskip) {
 }
 
 void PureSU2GaugeSim::Measurement() {
-  std::cout << MeasPoll() << std::endl;
+  //
 }
 
 void PureSU2GaugeSim::PrepareStorage() {
@@ -227,4 +260,92 @@ void PureSU2GaugeSim::DeleteStorage() {
         delete *direction_iter;
     }
   }
+}
+
+void PureSU2GaugeSim::InitIndividual() {
+  std::stringstream randletters;
+  if (settings_.writeconf == true || settings_.meas == true) {
+    // We are generating 3 random letters to mark the stream
+    srand(time(NULL));
+    char a;
+    for (int i=0; i<3; i++) {
+      a = char('a' + (rand() % 26));
+      randletters << a;
+    }
+  }
+
+  if (settings_.meas == true) {
+    // Generate filename for measurements writeout
+    std::stringstream filename;
+    filename << "meas_" << settings_.ns << "x" << settings_.nt << "_b" << settings_.beta << "_";
+    filename << randletters.str();
+    filename << ".data";
+    filemeasname_ = filename.str();
+
+    filemeas_.open(filemeasname_.c_str());
+    filemeas_.flags (std::ios::scientific);
+    filemeas_.precision(std::numeric_limits<double>::digits10 + 1); 
+    filemeas_ << "# Totalplaq Re(pl) Im(pl) Re(S/Beta) Spacelikeplaq Timelikeplaq" << std::endl;
+
+    std::cout << "Observables will be written to: " << filemeasname_ << std::endl;
+  }
+  
+  if (settings_.writeconf == true) {
+    // Generate filename for config writeout
+    std::stringstream filename;
+    filename << "conf_" << settings_.ns << "x" << settings_.nt << "_b" << settings_.beta << "_";
+    filename << randletters.str();
+    filename << "_";
+    fileconfnamebase_ = filename.str();
+
+    std::cout << "Configurations will be written to: " << fileconfnamebase_ << "#ofconfig" << std::endl;
+  }
+}
+
+void PureSU2GaugeSim::CleanupIndividual() {
+  if (settings_.meas == true) {
+    filemeas_.close();
+  }
+}
+
+int PureSU2GaugeSim::WriteConfig(const int &m) {
+  int elems=0;
+  std::complex<double> plaq, poll;
+  FILE* pFile;
+
+  // int nindex=nsite*matrixdim*matrixdim*DIM;
+  int nindex=settings_.nsites*2*2*4;
+
+  std::stringstream fconfigname;
+  fconfigname << fileconfnamebase_ << m << ".bin";
+
+  pFile = fopen(fconfigname.str().c_str(), "wb");
+  if (pFile == NULL) perror ("Error opening file");
+  else{
+    elems += fwrite(&settings_.ns, sizeof(int), 1, pFile);
+    elems += fwrite(&settings_.ns, sizeof(int), 1, pFile);
+    elems += fwrite(&settings_.ns, sizeof(int), 1, pFile);
+    elems += fwrite(&settings_.nt, sizeof(int), 1, pFile);
+    
+    poll=CalcPoll();
+    plaq=CalcPlaq();
+
+    elems += fwrite(&poll, sizeof(std::complex<double>),1, pFile);
+    elems += fwrite(&plaq, sizeof(std::complex<double>),1, pFile);
+
+    for (int is=0; is<settings_.nsites; is++) {
+      for (int mu=0; mu<settings_.dim; mu++) {
+        elems += fwrite((&lattice_[is][mu]->at(0,0)), sizeof(std::complex<double>), 2*2 , pFile);
+      }
+    }
+
+    fclose(pFile);
+  }
+  return nindex + 6 - elems;
+}
+
+void PureSU2GaugeSim::WriteMeas(const int &m) {
+  std::complex<double> poll=CalcPoll();
+  std::complex<double> plaq=CalcPlaq();
+  filemeas_ << std::real(plaq) << " " << std::real(poll) << " " << std::imag(poll) << " " << 0 << " " << 0 << " " << 0 << std::endl; 
 }

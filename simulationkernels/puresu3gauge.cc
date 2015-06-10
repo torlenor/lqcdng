@@ -252,7 +252,6 @@ std::complex<double> PureSU3GaugeSim::CalcPlaq() {
 
 void PureSU3GaugeSim::Update(const int nskip) {
   for (int skip=0; skip<nskip; skip++) {  
-    // TODO: Update procedures
     std::cout << "\r Sweep " << skip+1 << " of " << nskip << std::flush;
     Mixed();
     if (settings_.beta>0.0001) {

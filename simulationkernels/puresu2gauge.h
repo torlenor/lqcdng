@@ -24,6 +24,7 @@
 #define PURESU2GAUGESIM_H
 
 #include <iostream>
+#include <fstream>
 #include <vector>
 
 #include "genericsimclass.h"
@@ -42,6 +43,9 @@ class PureSU2GaugeSim : public GenericSimClass {
     void PrepareStorage();
     void DeleteStorage();
   
+    void InitIndividual();
+    void CleanupIndividual();
+		
     void Update(const int nskip);
 
     void StapleSum(Su2Matrix &S, int mu,int x);
@@ -49,11 +53,20 @@ class PureSU2GaugeSim : public GenericSimClass {
     void MetroOffer(Su2Matrix &Unew, Su2Matrix &Uold);
 
     void Measurement();
-    std::complex<double> MeasPoll();
+    std::complex<double> CalcPoll();
+    std::complex<double> CalcPlaq();
+		
+		int WriteConfig(const int &m);
+    void WriteMeas(const int &m);
 
     void Mixed();
     
     std::vector<std::vector<Su2Matrix*> > lattice_;
+		
+		// Filehandler for measurement
+    std::string filemeasname_;
+    std::string fileconfnamebase_;
+    std::ofstream filemeas_;
 };
 
 #endif // PURESU2GAUGESIM_H
