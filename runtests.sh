@@ -1,4 +1,8 @@
 #!/bin/bash
+
+su2params="-s 8 -t 4 -b 5.00 -n 20 -k 5 -e 40 -c -m"
+su3params="-s 8 -t 4 -b 6.00 -n 20 -k 5 -e 40 -c -m"
+
 function cleanup {
 	cd ..
   rm -r build_test
@@ -7,7 +11,7 @@ function cleanup {
 mkdir build_test
 cd build_test
 cmake ../
-make
+make -j 2
 if [ -f "./puresu2gauge" -a -f "./puresu3gauge" ]
 then
 	echo "Compile successful !"
@@ -17,10 +21,10 @@ else
 	exit
 fi
 echo "Performing test run..."
-echo "Calling './puresu2gauge -s 8 -t 4 -b 5.00 -n 10 -k 5 -e 20 -c -m' ..."
-./puresu3gauge -s 8 -t 4 -b 5.00 -n 10 -k 5 -e 40 -c -m
-echo "Calling './puresu3gauge -s 8 -t 4 -b 5.00 -n 10 -k 5 -e 20 -c -m' ..."
-./puresu2gauge -s 8 -t 4 -b 5.00 -n 10 -k 5 -e 40 -c -m
+echo "Calling './puresu2gauge ${su2params}' ..."
+./puresu2gauge $su3params
+echo "Calling './puresu3gauge ${su3params}' ..."
+./puresu3gauge $su2params 
 echo "Cleaning up..."
 cleanup
 cd ..

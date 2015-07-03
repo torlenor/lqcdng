@@ -12,9 +12,9 @@ SET(CODE_FILES_SU3 puresu3gauge.cc globalsettings.cc su3.cc init.cc simulationke
 
 set(CMAKE_BUILD_TYPE Release)
 
-SET(GCC_ADDITIONAL_COMPILE_FLAGS  "-O2 -Wall -std=c++11 -DDEBUG")
-# SET(GCC_ADDITIONAL_COMPILE_FLAGS  "-O3 -Wall -funroll-loops -std=c++11 -DNDEBUG")
-# SET(GCC_ADDITIONAL_COMPILE_FLAGS  "-O3 -Wall -funroll-loops -std=c++11 -DNDEBUG -DPREFETCH")
+# SET(GCC_ADDITIONAL_COMPILE_FLAGS  "-O2 -Wall -std=c++11 -DDEBUG")
+# SET(GCC_ADDITIONAL_COMPILE_FLAGS  "-O3 -Wall -std=c++11 -DNDEBUG")
+SET(GCC_ADDITIONAL_COMPILE_FLAGS  "-O3 -march=native -Wall -pipe -std=c++11 -DNDEBUG -DPREFETCH")
 SET(GCC_ADDITIONAL_LINK_FLAGS     "")
 SET(GCC_ADDITIONAL_LIBRARIES      "")
 

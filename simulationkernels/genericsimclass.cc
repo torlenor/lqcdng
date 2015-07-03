@@ -144,7 +144,7 @@ int GenericSimClass::StartSimulation() {
      }
     }
     tend = gettime();
-    std::cout << " done in " << tend - tstart  << " s." << std::endl;
+    std::cout << "done in " << tend - tstart  << " s." << std::endl;
   }
 
   DeleteStorage();
