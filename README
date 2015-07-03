@@ -1,0 +1,2 @@
+Simulation of pure SU(2) and SU(3) gauge theory on the lattice.
+New implementation using more modern C++ and no external libraries.
